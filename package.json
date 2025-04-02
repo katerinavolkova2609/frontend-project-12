@@ -10,6 +10,7 @@
   },
   "author": "",
   "license": "ISC",
+  "workspaces": ["frontend"],
   "dependencies": {
     "@hexlet/chat-server": "^2.0.4"
   }
