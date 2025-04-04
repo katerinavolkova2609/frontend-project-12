@@ -10,8 +10,12 @@
   },
   "author": "",
   "license": "ISC",
-  "workspaces": ["frontend"],
+  "workspaces": [
+    "frontend"
+  ],
   "dependencies": {
-    "@hexlet/chat-server": "^2.0.4"
+    "@hexlet/chat-server": "^2.0.4",
+    "lorem-ipsum": "^2.0.8",
+    "react-router-dom": "^7.4.1"
   }
 }
