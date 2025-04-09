@@ -22,3 +22,7 @@ develop:
 build:
 	rm -rf frontend/dist
 	npm run build
+
+run:
+	npm run build --prefix frontend
+	
