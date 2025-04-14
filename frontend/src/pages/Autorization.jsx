@@ -1,5 +1,4 @@
 import avatar from '../assets/avatar.jpg';
-import * as Yup from 'yup';
 import FormComponent from './components/form.jsx';
 
 const Autorization = () => {

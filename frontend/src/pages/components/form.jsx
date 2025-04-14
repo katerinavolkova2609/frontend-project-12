@@ -1,5 +1,7 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
+// import { useEffect } from 'react';
 
 const FormComponent = () => {
   const formik = useFormik({
@@ -7,8 +9,14 @@ const FormComponent = () => {
       username: '',
       password: '',
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log('submit', values);
+      try {
+        const response = await axios.post('/api/v1/login', values);
+        console.log(response.data);
+      } catch (e) {
+        console.log(e);
+      }
     },
     validationSchema: Yup.object().shape({
       username: Yup.string().required('Please enter login'),
@@ -52,7 +60,7 @@ const FormComponent = () => {
           type="password"
           id="password"
           className={`form-control  ${
-            formik.errors.username && formik.touched.username
+            formik.errors.password && formik.touched.password
               ? 'is-invalid'
               : ''
           }`}
