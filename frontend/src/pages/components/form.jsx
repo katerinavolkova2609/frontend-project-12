@@ -1,9 +1,12 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-// import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const FormComponent = () => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -14,13 +17,19 @@ const FormComponent = () => {
       try {
         const response = await axios.post('/api/v1/login', values);
         console.log(response.data);
+        if (response.data.hasOwnProperty('token')) {
+          localStorage.setItem('token', response.data.token);
+          console.log(localStorage);
+          navigate('/');
+        }
       } catch (e) {
-        console.log(e);
+        console.error(e);
+        setErrorMessage('Неверный логин или пароль')
       }
     },
     validationSchema: Yup.object().shape({
-      username: Yup.string().required('Please enter login'),
-      password: Yup.string().required('Please enter password'),
+      username: Yup.string().required(),
+      password: Yup.string().required(),
     }),
   });
   return (
@@ -37,7 +46,7 @@ const FormComponent = () => {
           placeholder="Ваш ник"
           id="username"
           className={`form-control  ${
-            formik.errors.username && formik.touched.username
+            formik.errors.username && formik.touched.username || errorMessage
               ? 'is-invalid'
               : ''
           }`}
@@ -60,7 +69,7 @@ const FormComponent = () => {
           type="password"
           id="password"
           className={`form-control  ${
-            formik.errors.password && formik.touched.password
+            formik.errors.password && formik.touched.password || errorMessage
               ? 'is-invalid'
               : ''
           }`}
@@ -73,6 +82,9 @@ const FormComponent = () => {
         <label className="form-label" htmlFor="password">
           Пароль
         </label>
+      {errorMessage && (
+        <div className="invalid-tooltip">{errorMessage}</div>
+      )}
       </div>
       <button type="submit" className="w-100 mb-3 btn btn-outline-primary">
         Войти
