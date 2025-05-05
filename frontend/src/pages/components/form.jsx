@@ -3,9 +3,12 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { loginSuccess} from '../../store/authSlice.js';
 
 const FormComponent = () => {
   const [errorMessage, setErrorMessage] = useState('');
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -18,8 +21,9 @@ const FormComponent = () => {
         const response = await axios.post('/api/v1/login', values);
         console.log(response.data);
         if (response.data.hasOwnProperty('token')) {
-          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('token', response.data);
           console.log(localStorage);
+          dispatch(loginSuccess(response.data))
           navigate('/');
         }
       } catch (e) {
@@ -41,7 +45,7 @@ const FormComponent = () => {
       <div className="form-floating mb-3">
         <input
           name="username"
-          autocomplete="username"
+          autoComplete="username"
           required=""
           placeholder="Ваш ник"
           id="username"
@@ -63,7 +67,7 @@ const FormComponent = () => {
       <div className="form-floating mb-4">
         <input
           name="password"
-          autocomplete="current-password"
+          autoComplete="current-password"
           required=""
           placeholder="Пароль"
           type="password"
