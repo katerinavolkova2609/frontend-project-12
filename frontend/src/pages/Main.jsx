@@ -21,8 +21,12 @@ const getChannels = async (token) => {
 const Main = () => {
   const user = useSelector(selectCurrentUser);
   const [channels, setChannels] = useState([]);
-  const { token } = user || {};;
-  console.log('!!!! ' + token)
+  const [message, setMessage] = useState('');
+  const [selectedChannel, setSelectedChannel] = useState('general');
+  const [selectedButton, setSelectedButton] = useState('1');
+  const { token } = user || {};
+  console.log('!!!! ' + token);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -36,6 +40,18 @@ const Main = () => {
     };
     fetchData();
   }, [token]);
+
+  const handleClick = (channel) => {
+    setSelectedButton(channel.id);
+    setSelectedChannel(channel.name);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Логика отправки сообщения...
+    setMessage(''); // Очистка поля после отправки
+  };
+
   return (
     <div className="d-flex flex-column vh-100" id="chat">
       <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
@@ -77,8 +93,9 @@ const Main = () => {
               {channels.map((channel) => (
                 <li key={channel.id} className="nav-item w-100">
                   <button
+                    onClick={() => handleClick(channel)}
                     type="button"
-                    className="w-100 rounded-0 text-start btn btn-secondary"
+                    className={`w-100 rounded-0 text-start" ${selectedButton === channel.id ? 'btn-secondary' : 'btn' }`}
                   >
                     <span className="me-1">#</span>
                     {channel.name}
@@ -91,7 +108,7 @@ const Main = () => {
             <div className="d-flex flex-column h-100">
               <div className="bg-light mb-4 p-3 shadow-sm small">
                 <p className="m-0">
-                  <b># general</b>
+                  <b># {selectedChannel}</b>
                 </p>
                 <span className="text-muted">0 сообщений</span>
               </div>
@@ -107,7 +124,8 @@ const Main = () => {
                       aria-label="Новое сообщение"
                       placeholder="Введите сообщение..."
                       className="border-0 p-0 ps-2 form-control"
-                      value=""
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
                     />
                     <button
                       type="submit"
