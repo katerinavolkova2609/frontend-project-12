@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginSuccess} from '../../store/authSlice.js';
+import { loginSuccess } from '../../store/authSlice.js';
 
 const FormComponent = () => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -16,19 +16,16 @@ const FormComponent = () => {
       password: '',
     },
     onSubmit: async (values) => {
-      console.log('submit', values);
       try {
         const response = await axios.post('/api/v1/login', values);
-        console.log(response.data);
         if (response.data.hasOwnProperty('token')) {
-          localStorage.setItem('token', response.data);
-          console.log(localStorage);
-          dispatch(loginSuccess(response.data))
+          localStorage.setItem('token', response.data.token);
+          dispatch(loginSuccess({ user: response.data }));
           navigate('/');
         }
       } catch (e) {
         console.error(e);
-        setErrorMessage('Неверный логин или пароль')
+        setErrorMessage('Неверный логин или пароль');
       }
     },
     validationSchema: Yup.object().shape({
@@ -50,7 +47,7 @@ const FormComponent = () => {
           placeholder="Ваш ник"
           id="username"
           className={`form-control  ${
-            formik.errors.username && formik.touched.username || errorMessage
+            (formik.errors.username && formik.touched.username) || errorMessage
               ? 'is-invalid'
               : ''
           }`}
@@ -73,7 +70,7 @@ const FormComponent = () => {
           type="password"
           id="password"
           className={`form-control  ${
-            formik.errors.password && formik.touched.password || errorMessage
+            (formik.errors.password && formik.touched.password) || errorMessage
               ? 'is-invalid'
               : ''
           }`}
@@ -86,9 +83,7 @@ const FormComponent = () => {
         <label className="form-label" htmlFor="password">
           Пароль
         </label>
-      {errorMessage && (
-        <div className="invalid-tooltip">{errorMessage}</div>
-      )}
+        {errorMessage && <div className="invalid-tooltip">{errorMessage}</div>}
       </div>
       <button type="submit" className="w-100 mb-3 btn btn-outline-primary">
         Войти

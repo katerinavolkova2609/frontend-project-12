@@ -1,31 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { getChannels, getMessages, sendMessage } from './api.js';
+import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentUser } from '../store/authSlice.js';
-
-const getChannels = async (token) => {
-  try {
-    const response = await axios.get('/api/v1/channels', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    console.log(response.data); // => [{ id: '1', name: 'general', removable: false }, ...]
-    return response.data;
-  } catch (error) {
-    console.error('Ошибка при получении каналов:', error);
-    throw error;
-  }
-};
+import ChannelList from './components/ChannelList.jsx';
+import MessageForm from './components/MessageForm.jsx';
 
 const Main = () => {
-  const user = useSelector(selectCurrentUser);
+  const { user } = useSelector(selectCurrentUser);
+  const { username, token } = user;
+  // const { token } = user || {};
+  // const token = localStorage.getItem('token');
+
   const [channels, setChannels] = useState([]);
-  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState([]);
   const [selectedChannel, setSelectedChannel] = useState('general');
   const [selectedButton, setSelectedButton] = useState('1');
-  const { token } = user || {};
-  console.log('!!!! ' + token);
+  const [newMessageBody, setNewMessageBody] = useState('');
+  // console.log('P ' + token);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,15 +32,43 @@ const Main = () => {
     fetchData();
   }, [token]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (token) {
+          const messages = await getMessages(token);
+          setMessages(messages);
+        }
+      } catch (e) {
+        console.error('Ошибка при загрузке сообщений:', e);
+      }
+    };
+    fetchData();
+  }, [token]);
+
   const handleClick = (channel) => {
     setSelectedButton(channel.id);
     setSelectedChannel(channel.name);
   };
 
-  const handleSubmit = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
-    // Логика отправки сообщения...
-    setMessage(''); // Очистка поля после отправки
+    if (!newMessageBody.trim()) return; // игнорировать пустое сообщение
+    const messagePayload = {
+      body: newMessageBody,
+      channelId: selectedButton,
+      username: username,
+    };
+    try {
+      await sendMessage(token, messagePayload); // вызов API для отправки
+      // После успешной отправки можно обновить список сообщений:
+      console.log('XXX' + messagePayload);
+      const updatedMessages = await getMessages(token);
+      setMessages(updatedMessages);
+      setNewMessageBody(''); // очистить поле ввода после отправки сообщения
+    } catch (e) {
+      console.error('Ошибка при отправке сообщения:', e);
+    }
   };
 
   return (
@@ -86,23 +105,11 @@ const Main = () => {
                 <span className="visually-hidden">+</span>
               </button>
             </div>
-            <ul
-              id="channels-box"
-              className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block"
-            >
-              {channels.map((channel) => (
-                <li key={channel.id} className="nav-item w-100">
-                  <button
-                    onClick={() => handleClick(channel)}
-                    type="button"
-                    className={`w-100 rounded-0 text-start" ${selectedButton === channel.id ? 'btn-secondary' : 'btn' }`}
-                  >
-                    <span className="me-1">#</span>
-                    {channel.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <ChannelList
+              channels={channels}
+              selectedChannelId={selectedButton}
+              onSelect={handleClick}
+            />
           </div>
           <div className="col p-0 h-100">
             <div className="d-flex flex-column h-100">
@@ -117,37 +124,11 @@ const Main = () => {
                 className="chat-messages overflow-auto px-5 "
               ></div>
               <div className="mt-auto px-5 py-3">
-                <form noValidate="" className="py-1 border rounded-2">
-                  <div className="input-group has-validation">
-                    <input
-                      name="body"
-                      aria-label="Новое сообщение"
-                      placeholder="Введите сообщение..."
-                      className="border-0 p-0 ps-2 form-control"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                    />
-                    <button
-                      type="submit"
-                      disabled=""
-                      className="btn btn-group-vertical"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 16 16"
-                        width="20"
-                        height="20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"
-                        ></path>
-                      </svg>
-                      <span className="visually-hidden">Отправить</span>
-                    </button>
-                  </div>
-                </form>
+                <MessageForm
+                  messageBody={newMessageBody}
+                  onChange={(text) => setNewMessageBody(text)}
+                  onSend={handleSendMessage}
+                />
               </div>
             </div>
           </div>

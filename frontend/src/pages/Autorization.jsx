@@ -1,5 +1,5 @@
 import avatar from '../assets/avatar.jpg';
-import FormComponent from './components/form.jsx';
+import FormComponent from './components/AuthForm.jsx';
 
 const Autorization = () => {
   return (
