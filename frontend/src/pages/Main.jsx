@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getChannels, getMessages, sendMessage } from './api.js';
+import { getChannels, getMessages, sendMessage, removeMessage } from './api.js';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentUser } from '../store/authSlice.js';
 import ChannelList from './components/ChannelList.jsx';
@@ -8,15 +8,12 @@ import MessageForm from './components/MessageForm.jsx';
 const Main = () => {
   const { user } = useSelector(selectCurrentUser);
   const { username, token } = user;
-  // const { token } = user || {};
-  // const token = localStorage.getItem('token');
 
   const [channels, setChannels] = useState([]);
   const [messages, setMessages] = useState([]);
   const [selectedChannel, setSelectedChannel] = useState('general');
   const [selectedButton, setSelectedButton] = useState('1');
   const [newMessageBody, setNewMessageBody] = useState('');
-  // console.log('P ' + token);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +35,12 @@ const Main = () => {
         if (token) {
           const messages = await getMessages(token);
           setMessages(messages);
+          console.log(messages);
+          // messages.map(async (item) => {
+          //   await removeMessage(token, item.id);
+          //   console.log('сообщение удалено');
+          //   return;
+          // });
         }
       } catch (e) {
         console.error('Ошибка при загрузке сообщений:', e);
@@ -53,19 +56,17 @@ const Main = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!newMessageBody.trim()) return; // игнорировать пустое сообщение
+    if (!newMessageBody.trim()) return;
     const messagePayload = {
       body: newMessageBody,
       channelId: selectedButton,
       username: username,
     };
     try {
-      await sendMessage(token, messagePayload); // вызов API для отправки
-      // После успешной отправки можно обновить список сообщений:
-      console.log('XXX' + messagePayload);
+      await sendMessage(token, messagePayload);
       const updatedMessages = await getMessages(token);
       setMessages(updatedMessages);
-      setNewMessageBody(''); // очистить поле ввода после отправки сообщения
+      setNewMessageBody('');
     } catch (e) {
       console.error('Ошибка при отправке сообщения:', e);
     }
@@ -122,7 +123,15 @@ const Main = () => {
               <div
                 id="messages-box"
                 className="chat-messages overflow-auto px-5 "
-              ></div>
+              >
+                {messages.map((message) => (
+                  <div className="text-break mb-2">
+                    <b>{message.username}</b>
+                    {': '}
+                    {message.body}
+                  </div>
+                ))}
+              </div>
               <div className="mt-auto px-5 py-3">
                 <MessageForm
                   messageBody={newMessageBody}

@@ -22,7 +22,6 @@ const getMessages = async (token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response.data); // => [{ id: '1', body: 'text message', channelId: '1', username: 'admin }, ...]
     return response.data;
   } catch (error) {
     console.error('Ошибка при загрузке сообщений:', error);
@@ -30,7 +29,6 @@ const getMessages = async (token) => {
   }
 };
 
-// const newMessage = { body: 'new message', channelId: '1', username: 'admin };
 const sendMessage = async (token, newMessage) => {
   try {
     const response = await axios.post('/api/v1/messages', newMessage, {
@@ -38,7 +36,6 @@ const sendMessage = async (token, newMessage) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response.data); // => [{ id: '1', body: 'text message', channelId: '1', username: 'admin }, ...]
     return response.data;
   } catch (error) {
     console.error('Ошибка при отправке сообщения:', error);
@@ -46,4 +43,17 @@ const sendMessage = async (token, newMessage) => {
   }
 };
 
-export { getChannels, getMessages, sendMessage };
+const removeMessage = async (token, id) => {
+  try {
+    axios.delete(`/api/v1/messages/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.error('Ошибка при удалении сообщения:', error);
+    throw error;
+  }
+};
+
+export { getChannels, getMessages, sendMessage, removeMessage };
