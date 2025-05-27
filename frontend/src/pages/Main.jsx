@@ -124,8 +124,9 @@ const Main = () => {
                 id="messages-box"
                 className="chat-messages overflow-auto px-5 "
               >
-                {messages.map((message) => (
-                  <div className="text-break mb-2">
+                {messages.filter((item) => item.channelId === selectedButton)
+                .map((message) => (
+                    <div className="text-break mb-2">
                     <b>{message.username}</b>
                     {': '}
                     {message.body}
