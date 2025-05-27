@@ -33,4 +33,4 @@ const Autorization = () => {
   );
 };
 
-export { Autorization };
+export default Autorization;
