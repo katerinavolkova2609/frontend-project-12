@@ -118,7 +118,7 @@ const Main = () => {
                 <p className="m-0">
                   <b># {selectedChannel}</b>
                 </p>
-                <span className="text-muted">0 сообщений</span>
+                <span className="text-muted">{messages.filter((item) => item.channelId === selectedButton).length} сообщений</span>
               </div>
               <div
                 id="messages-box"

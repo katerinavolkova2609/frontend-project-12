@@ -30,7 +30,10 @@ const SignUpForm = () => {
       }
     },
     validationSchema: Yup.object().shape({
-      username: Yup.string().required('обязательное поле'),
+      username: Yup.string()
+        .min(3, 'От 3 до 20 символов')
+        .max(20, 'От 3 до 20 символов')
+        .required('обязательное поле'),
       password: Yup.string()
         .min(6, 'минимум 6 символов')
         .required('обязательное поле'),
@@ -56,10 +59,14 @@ const SignUpForm = () => {
           }`}
           value={formik.values.username}
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
         {formik.errors.username && formik.touched.username ? (
-          <div className="text-danger">{formik.errors.username}</div>
+          <div placement="right" class="invalid-tooltip">
+            {formik.errors.username}
+          </div>
         ) : null}
+
         <label class="form-label" for="username">
           Имя пользователя
         </label>
@@ -74,15 +81,16 @@ const SignUpForm = () => {
           type="password"
           id="password"
           class={`form-control  ${
-            (formik.errors.password && formik.touched.password) || errorMessage
+            formik.errors.password && formik.touched.password || errorMessage
               ? 'is-invalid'
               : ''
           }`}
           value={formik.values.password}
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
         {formik.errors.password && formik.touched.password ? (
-          <div className="text-danger">{formik.errors.password}</div>
+          <div placement="right" class="invalid-tooltip">{formik.errors.password}</div>
         ) : null}
         <label class="form-label" for="password">
           Пароль
@@ -97,16 +105,17 @@ const SignUpForm = () => {
           type="password"
           id="confirmPassword"
           class={`form-control  ${
-            (formik.errors.confirmPassword && formik.touched.confirmPassword) ||
+            formik.errors.confirmPassword && formik.touched.confirmPassword ||
             errorMessage
               ? 'is-invalid'
               : ''
           }`}
           value={formik.values.confirmPassword}
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
         {formik.errors.confirmPassword && formik.touched.confirmPassword ? (
-          <div className="text-danger">{formik.errors.confirmPassword}</div>
+          <div placement="right" class="invalid-tooltip">{formik.errors.confirmPassword}</div>
         ) : null}
         <label class="form-label" for="confirmPassword">
           Подтвердите пароль
