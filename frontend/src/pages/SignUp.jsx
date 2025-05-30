@@ -6,7 +6,7 @@ const SignUp = () => {
     <div class="d-flex flex-column vh-100" id="signup">
       <nav class="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
         <div class="container">
-          <a class="navbar-brand" href="/">
+          <a class="navbar-brand" href="/login">
             Hexlet Chat
           </a>
           <button type="button" class="btn btn-primary">

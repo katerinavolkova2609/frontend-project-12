@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginSuccess } from '../../store/authSlice.js';
+import { setUser } from '../../store/authSlice.js';
 
 const FormComponent = () => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -20,9 +20,10 @@ const FormComponent = () => {
         const response = await axios.post('/api/v1/login', values);
         if (response.data.hasOwnProperty('token')) {
           localStorage.setItem('token', response.data.token);
-          dispatch(loginSuccess({ user: response.data }));
+          localStorage.setItem('username', response.data.username);
+          dispatch(setUser({ user: response.data }));
           navigate('/');
-        }
+        } else navigate('/login');
       } catch (e) {
         console.error(e);
         setErrorMessage('Неверный логин или пароль');
