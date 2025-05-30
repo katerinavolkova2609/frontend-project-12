@@ -56,4 +56,19 @@ const removeMessage = async (token, id) => {
   }
 };
 
-export { getChannels, getMessages, sendMessage, removeMessage };
+// const newChannel = { name: 'new channel' };
+const sendNewChannel = async (token, newChannel) => {
+  try {
+    axios.post('/api/v1/channels', newChannel, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+      // => { id: '3', name: 'new channel', removable: true }
+  } catch (error) {
+    console.error('Ошибка при создании нового канала:', error);
+    throw error;
+  }
+};
+
+export { getChannels, getMessages, sendMessage, removeMessage, sendNewChannel };

@@ -99,7 +99,7 @@ const Main = () => {
       className="d-flex flex-column vh-100"
       id="chat"
     >
-      <ModalAddChannel isOpen={isModalOpen} onClose={closeModal} />
+      <ModalAddChannel isOpen={isModalOpen} onClose={closeModal} token={token} />
       {isModalOpen && <div className="fade modal-backdrop show" />}
         <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
           <div className="container">
