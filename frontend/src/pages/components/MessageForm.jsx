@@ -1,5 +1,3 @@
-import React from 'react';
-
 const MessageForm = ({ messageBody, onChange, onSend }) => (
   <form noValidate className="py-1 border rounded-2" onSubmit={onSend}>
     <div className="input-group has-validation">

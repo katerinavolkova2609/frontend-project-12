@@ -1,4 +1,3 @@
-import React from 'react';
 import AddChannelForm from './AddChannelForm.jsx';
 
 const ModalAddChannel = ({ isOpen, onClose, token }) => {

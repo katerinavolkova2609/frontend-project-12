@@ -7,7 +7,6 @@ const getChannels = async (token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response.data); // => [{ id: '1', name: 'general', removable: false }, ...]
     return response.data;
   } catch (error) {
     console.error('Ошибка при получении каналов:', error);

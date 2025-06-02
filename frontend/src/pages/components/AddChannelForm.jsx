@@ -1,13 +1,12 @@
-import axios from 'axios';
-import { sendNewChannel } from '../api';
-// import { useNavigate } from 'react-router-dom';
-// import { useState } from 'react';
-// import { useDispatch } from 'react-redux';
+import { sendNewChannel, getChannels } from '../api';
+import { setCurrentChannel, getChannelsFromState} from '../../store/channelsSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 
 const AddChannelForm = ({ onClose, token }) => {
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       channel: '',
@@ -16,10 +15,13 @@ const AddChannelForm = ({ onClose, token }) => {
       console.log(values);
         try {
             await sendNewChannel(token, {name: values.channel});
-
+            const channels =  await getChannels(token);
+            const currentChannel = channels.at(-1);
+            console.log(currentChannel)
+            dispatch(setCurrentChannel(currentChannel));
+            onClose();
         } catch (e) {
           console.error(e);
-        //   setErrorMessage('Ошибка отправки данных');
         }
     },
     validationSchema: Yup.object().shape({

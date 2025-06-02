@@ -6,8 +6,6 @@ const initialState = {
     username: null,
     token: null,
   },
-  loading: false,
-  error: null,
 };
 
 const authSlice = createSlice({
@@ -17,7 +15,6 @@ const authSlice = createSlice({
     setUser(state, action) {
       state.isAuthenticated = true;
       state.user = action.payload;
-      state.loading = false; // Завершаем загрузку
     },
     logout(state) {
       state.isAuthenticated = false;
@@ -26,6 +23,6 @@ const authSlice = createSlice({
   },
 });
 
+export const selectCurrentUser = (state) => state.auth.user;
 export const { setUser, logout } = authSlice.actions;
 export default authSlice.reducer;
-export const selectCurrentUser = (state) => state.auth.user;
