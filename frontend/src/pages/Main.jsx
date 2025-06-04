@@ -1,9 +1,26 @@
 import { useEffect, useState } from 'react';
-import { getChannels, getMessages, sendMessage, removeMessage } from './api.js';
+import {
+  getChannels,
+  getMessages,
+  sendMessage,
+  removeMessage,
+  removeChannel,
+} from './api.js';
 import { useSelector, useDispatch } from 'react-redux';
-import { setMessages, addMessage, getMessagesFromState } from '../store/messagesSlice.js';
+import {
+  setMessages,
+  addMessage,
+  getMessagesFromState,
+} from '../store/messagesSlice.js';
 // import { selectCurrentUser, logout } from '../store/authSlice.js';
-import { getChannelsFromState, getCurrentChannel, setChannels, addChannel, setCurrentChannel} from '../store/channelsSlice.js';
+import {
+  getChannelsFromState,
+  getCurrentChannel,
+  setChannels,
+  addChannel,
+  setCurrentChannel,
+  removeChannelFromState,
+} from '../store/channelsSlice.js';
 import ChannelList from './components/ChannelList.jsx';
 import MessageForm from './components/MessageForm.jsx';
 import ModalAddChannel from './components/ModalAddChannel.jsx';
@@ -36,12 +53,7 @@ const Main = () => {
       try {
         if (token) {
           const messages = await getMessages(token);
-          dispatch(setMessages(messages))
-          // messages.map(async (item) => {
-          //   await removeMessage(token, item.id);
-          //   console.log('сообщение удалено');
-          //   return;
-          // });
+          dispatch(setMessages(messages));
         }
       } catch (e) {
         console.error('Ошибка при загрузке сообщений:', e);
@@ -69,14 +81,28 @@ const Main = () => {
     return () => {
       socket.off('newChannel');
       socket.disconnect();
-    }
+    };
   }, []);
 
+  useEffect(() => {
+    socket.connect();
+    socket.on('removeChannel', (payload) => {
+      console.log(payload);
+      dispatch(removeChannelFromState(payload));
+    });
+    return () => {
+      socket.off('removeChannel');
+      socket.disconnect();
+    };
+  }, []);
 
   const handleClick = (channel) => {
-    // setSelectedButton(channel.id);
-    // setSelectedChannel(channel.name);
-    dispatch(setCurrentChannel(channel))
+    dispatch(setCurrentChannel(channel));
+  };
+  const defaultChannel = {
+    id: '1',
+    name: 'general',
+    removable: false,
   };
 
   const currentChannel = useSelector(getCurrentChannel);
@@ -98,6 +124,17 @@ const Main = () => {
       console.error('Ошибка при отправке сообщения:', e);
     }
   };
+
+  const handleRemoveChannel = async (token, channelId) => {
+    await removeChannel(token, channelId);
+    const channels = await getChannels(token);
+    dispatch(setChannels(channels));
+    if (currentChannel.id === channelId) {
+      handleClick({ defaultChannel });
+    }
+    //не забыть удалить сообщения (!!!!)
+  };
+
   const messages = useSelector(getMessagesFromState);
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -147,6 +184,8 @@ const Main = () => {
               channels={useSelector(getChannelsFromState)}
               selectedChannelId={currentChannel.id}
               onSelect={handleClick}
+              token={token}
+              onRemove={handleRemoveChannel}
             />
           </div>
           <div className="col p-0 h-100">
@@ -157,8 +196,9 @@ const Main = () => {
                 </p>
                 <span className="text-muted">
                   {
-                    messages.filter((item) => item.channelId === currentChannel.id)
-                      .length
+                    messages.filter(
+                      (item) => item.channelId === currentChannel.id
+                    ).length
                   }
                   сообщений
                 </span>

@@ -1,5 +1,14 @@
-const ChannelList = ({ channels, selectedChannelId, onSelect }) => {
-  console.log(channels);
+import { useState } from 'react';
+import { removeChannel } from '../api.js';
+
+const ChannelList = ({ channels, selectedChannelId, onSelect, token, onRemove }) => {
+  const [openMenuChannelId, setOpenMenuChannelId] = useState();
+
+  const toogleMenu = (channelId) => {
+    setOpenMenuChannelId((prev) => (prev === channelId ? null : channelId));
+  };
+
+
   return (
     <ul
       id="channels-box"
@@ -7,17 +16,82 @@ const ChannelList = ({ channels, selectedChannelId, onSelect }) => {
     >
       {channels.map((channel) => (
         <li key={channel.id} className="nav-item w-100">
-          {/* {onSelect && <div role='group' className='d-flex dropdown btn-group'></div>} */}
-          <button
-            onClick={() => onSelect(channel)}
-            type="button"
-            className={`w-100 rounded-0 text-start btn${
-              selectedChannelId === channel.id ? ' btn-secondary' : ''
-            }`}
-          >
-            <span className="me-1">#</span>
-            {channel.name}
-          </button>
+          {channel.removable ? (
+            <div
+              role="group"
+              className={`d-flex dropdown btn-group ${
+                openMenuChannelId === channel.id && 'show'
+              }`}
+            >
+              <button
+                onClick={() => onSelect(channel)}
+                type="button"
+                className={`w-100 rounded-0 text-start text-truncate btn ${
+                  selectedChannelId === channel.id ? ' btn-secondary' : ''
+                }`}
+              >
+                <span class="me-1">#</span>
+                {channel.name}
+              </button>
+              <button
+                onClick={() => toogleMenu(channel.id)}
+                aria-expanded={openMenuChannelId === channel.id}
+                type="button"
+                id="react-aria5336511287-:r0:"
+                className={`flex-grow-0 dropdown-toggle dropdown-toggle-split btn ${
+                  openMenuChannelId === channel.id && ' show'
+                }${selectedChannelId === channel.id ? ' btn-secondary' : ''}`}
+              >
+                <span class="visually-hidden">Управление каналом</span>
+              </button>
+              {openMenuChannelId === channel.id && (
+                <div
+                  x-placement="bottom-start"
+                  aria-labelledby="react-aria2809273870-:r1:"
+                  className="dropdown-menu show"
+                  data-popper-reference-hidden="false"
+                  data-popper-escaped="false"
+                  data-popper-placement="bottom-start"
+                  style={{
+                    position: 'absolute',
+                    inset: '0px auto auto 0px',
+                    transform: 'translate3d(-8px, 40px, 0px',
+                  }}
+                >
+                  <a
+                    onClick={async () =>  await onRemove(token, channel.id)}
+                    data-rr-ui-dropdown-item=""
+                    className="dropdown-item"
+                    role="button"
+                    tabindex="0"
+                    href="#"
+                  >
+                    Удалить
+                  </a>
+                  <a
+                    data-rr-ui-dropdown-item=""
+                    className="dropdown-item"
+                    role="button"
+                    tabindex="0"
+                    href="#"
+                  >
+                    Переименовать
+                  </a>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={() => onSelect(channel)}
+              type="button"
+              className={`w-100 rounded-0 text-start btn ${
+                selectedChannelId === channel.id ? ' btn-secondary' : ''
+              }`}
+            >
+              <span className="me-1">#</span>
+              {channel.name}
+            </button>
+          )}
         </li>
       ))}
     </ul>

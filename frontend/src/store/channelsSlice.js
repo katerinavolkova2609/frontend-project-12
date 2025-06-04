@@ -22,11 +22,16 @@ const channelsSlice = createSlice({
     setCurrentChannel(state, action) {
       state.currentChannel = action.payload;
     },
+    removeChannelFromState(state, action) {
+      console.log(state.list)
+      state.list.filter((channel) => !channel.id === action.payload.id);
+      console.log(state.list);
+    }
   },
 });
 
 export const getChannelsFromState = (state) => state.channels.list;
 export const getCurrentChannel = (state) => state.channels.currentChannel;
-export const { setChannels, addChannel, setCurrentChannel } =
+export const { setChannels, addChannel, setCurrentChannel, removeChannelFromState } =
   channelsSlice.actions;
 export default channelsSlice.reducer;
