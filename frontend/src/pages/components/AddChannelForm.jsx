@@ -1,17 +1,19 @@
 import { sendNewChannel, getChannels } from '../api';
-import { setCurrentChannel } from '../../store/channelsSlice.js';
-import { useDispatch } from 'react-redux';
+import { setCurrentChannel, getChannelsFromState } from '../../store/channelsSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 const AddChannelForm = ({ onClose, token }) => {
   const dispatch = useDispatch();
+  const channels = useSelector(getChannelsFromState);
+  const namesOfChannels = channels.map((channel) => channel.name);
+
   const formik = useFormik({
     initialValues: {
       channel: '',
     },
     onSubmit: async (values) => {
-      console.log(values);
       try {
         await sendNewChannel(token, { name: values.channel });
         const channels = await getChannels(token);
@@ -25,7 +27,7 @@ const AddChannelForm = ({ onClose, token }) => {
     validationSchema: Yup.object().shape({
       channel: Yup.string()
         .min(3, 'От 3 до 20 символов')
-        .notOneOf([])
+        .notOneOf(namesOfChannels, 'Должно быть уникальным')
         .required('Введите название канала'),
     }),
   });

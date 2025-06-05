@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 
 const initialState = [];
 
@@ -13,7 +13,9 @@ const messagesSlice = createSlice({
       state.push(action.payload);
     },
     removeMessageFromState(state, action) {
-      state.messages.filter((message) => message.channelId !== action);
+      // console.log(current(state));
+      state.filter((message) => message.channelId !== action);
+      // console.log(current(state));
     }
   },
 });

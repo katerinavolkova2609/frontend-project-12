@@ -54,6 +54,7 @@ const Main = () => {
       try {
         if (token) {
           const messages = await getMessages(token);
+          console.log(messages);
           dispatch(setMessages(messages));
         }
       } catch (e) {
@@ -90,7 +91,6 @@ const Main = () => {
     socket.on('removeChannel', (payload) => {
       console.log(payload);
       dispatch(removeChannelFromState(payload));
-      dispatch(removeMessageFromState(payload.id));
     });
     return () => {
       socket.off('removeChannel');
@@ -131,10 +131,12 @@ const Main = () => {
     await removeChannel(token, channelId);
     const channels = await getChannels(token);
     dispatch(setChannels(channels));
+
     if (currentChannel.id === channelId) {
       handleClick({ defaultChannel });
     }
-    //не забыть удалить сообщения (!!!!)
+    dispatch(removeMessageFromState(channelId));
+    // //не забыть удалить сообщения (!!!!)
   };
 
   const messages = useSelector(getMessagesFromState);
