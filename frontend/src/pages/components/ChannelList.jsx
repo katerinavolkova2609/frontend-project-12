@@ -1,13 +1,23 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
+import useClickOutside from '../utils/useClickOutside.jsx';
 import { removeChannel } from '../api.js';
 
-const ChannelList = ({ channels, selectedChannelId, onSelect, token, onRemove }) => {
+const ChannelList = ({
+  channels,
+  selectedChannelId,
+  onSelect,
+  token,
+  onRemove,
+}) => {
+  // const [isOpen, setIsOpen] = useState(false);
   const [openMenuChannelId, setOpenMenuChannelId] = useState();
+  const dropdounRef = useRef(null);
 
-  const toogleMenu = (channelId) => {
+  const toggleMenu = useCallback((channelId) => {
     setOpenMenuChannelId((prev) => (prev === channelId ? null : channelId));
-  };
+  }, []);
 
+  useClickOutside(dropdounRef, toggleMenu);
 
   return (
     <ul
@@ -18,6 +28,7 @@ const ChannelList = ({ channels, selectedChannelId, onSelect, token, onRemove })
         <li key={channel.id} className="nav-item w-100">
           {channel.removable ? (
             <div
+              ref={dropdounRef}
               role="group"
               className={`d-flex dropdown btn-group ${
                 openMenuChannelId === channel.id && 'show'
@@ -34,7 +45,7 @@ const ChannelList = ({ channels, selectedChannelId, onSelect, token, onRemove })
                 {channel.name}
               </button>
               <button
-                onClick={() => toogleMenu(channel.id)}
+                onClick={() => toggleMenu(channel.id)}
                 aria-expanded={openMenuChannelId === channel.id}
                 type="button"
                 id="react-aria5336511287-:r0:"
@@ -59,7 +70,7 @@ const ChannelList = ({ channels, selectedChannelId, onSelect, token, onRemove })
                   }}
                 >
                   <a
-                    onClick={async () =>  await onRemove(token, channel.id)}
+                    onClick={async () => await onRemove(token, channel.id)}
                     data-rr-ui-dropdown-item=""
                     className="dropdown-item"
                     role="button"
