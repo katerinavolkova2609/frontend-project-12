@@ -11,6 +11,7 @@ import {
   setMessages,
   addMessage,
   getMessagesFromState,
+  removeMessageFromState,
 } from '../store/messagesSlice.js';
 // import { selectCurrentUser, logout } from '../store/authSlice.js';
 import {
@@ -89,6 +90,7 @@ const Main = () => {
     socket.on('removeChannel', (payload) => {
       console.log(payload);
       dispatch(removeChannelFromState(payload));
+      dispatch(removeMessageFromState(payload.id));
     });
     return () => {
       socket.off('removeChannel');

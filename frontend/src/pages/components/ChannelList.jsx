@@ -28,7 +28,7 @@ const ChannelList = ({
         <li key={channel.id} className="nav-item w-100">
           {channel.removable ? (
             <div
-              ref={dropdounRef}
+              ref={openMenuChannelId === channel.id ? dropdounRef : null}
               role="group"
               className={`d-flex dropdown btn-group ${
                 openMenuChannelId === channel.id && 'show'
