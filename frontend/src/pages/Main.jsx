@@ -104,6 +104,7 @@ const Main = () => {
   const handleClick = (channel) => {
     dispatch(setCurrentChannel(channel));
   };
+
   const defaultChannel = {
     id: '1',
     name: 'general',
@@ -148,11 +149,12 @@ const Main = () => {
     await removeChannel(token, channelId);
     const channels = await getChannels(token);
     dispatch(setChannels(channels));
-    if (currentChannel.id === channelId) {
-      handleClick({ defaultChannel });
-    }
+
     dispatch(removeMessageFromState(channelId));
     closeModalDeleteChannel();
+    if (currentChannel.id === channelId) {
+      handleClick(defaultChannel);
+    }
   };
 
   return (
