@@ -25,6 +25,7 @@ import {
 import ChannelList from './components/ChannelList.jsx';
 import MessageForm from './components/MessageForm.jsx';
 import ModalAddChannel from './components/ModalAddChannel.jsx';
+import ModalDeleteChannel from './components/ModalDeleteChannel.jsx';
 import socket from './socket.js';
 
 const Main = () => {
@@ -33,7 +34,9 @@ const Main = () => {
   const dispatch = useDispatch();
 
   const [newMessageBody, setNewMessageBody] = useState('');
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalAddChannelOpen, setModalAddChannelOpen] = useState(false);
+  const [isModalDeleteChannelOpen, setModalDeleteChannelOpen] = useState(false);
+  const [selectedChannelId, setSelectedChannelId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -126,31 +129,51 @@ const Main = () => {
       console.error('Ошибка при отправке сообщения:', e);
     }
   };
+  const messages = useSelector(getMessagesFromState);
+
+  const openModalAddChannel = () => setModalAddChannelOpen(true);
+  const closeModalAddChannel = () => setModalAddChannelOpen(false);
+
+  const openModalDeleteChannel = (channelId) => {
+    setModalDeleteChannelOpen(true);
+    setSelectedChannelId(channelId);
+  };
+
+  const closeModalDeleteChannel = () => {
+    setModalDeleteChannelOpen(false);
+    setSelectedChannelId(null);
+  };
 
   const handleRemoveChannel = async (token, channelId) => {
     await removeChannel(token, channelId);
     const channels = await getChannels(token);
     dispatch(setChannels(channels));
-
     if (currentChannel.id === channelId) {
       handleClick({ defaultChannel });
     }
     dispatch(removeMessageFromState(channelId));
-    // //не забыть удалить сообщения (!!!!)
+    closeModalDeleteChannel();
   };
-
-  const messages = useSelector(getMessagesFromState);
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
 
   return (
     <div className="d-flex flex-column vh-100" id="chat">
       <ModalAddChannel
-        isOpen={isModalOpen}
-        onClose={closeModal}
+        isOpen={isModalAddChannelOpen}
+        onClose={closeModalAddChannel}
         token={token}
       />
-      {isModalOpen && <div className="fade modal-backdrop show" />}
+      <ModalDeleteChannel
+        isOpen={isModalDeleteChannelOpen}
+        onClose={closeModalDeleteChannel}
+        openModalProps={openModalDeleteChannel}
+        onRemove={handleRemoveChannel}
+        token={token}
+        channelId={selectedChannelId}
+      />
+      {isModalAddChannelOpen ||
+        (isModalDeleteChannelOpen && (
+          <div className="fade modal-backdrop show" />
+        ))}
       <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
         <div className="container">
           <a className="navbar-brand" href="/">
@@ -169,7 +192,7 @@ const Main = () => {
               <button
                 type="button"
                 className="p-0 text-primary btn btn-group-vertical"
-                onClick={openModal}
+                onClick={openModalAddChannel}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -190,6 +213,7 @@ const Main = () => {
               onSelect={handleClick}
               token={token}
               onRemove={handleRemoveChannel}
+              openModal={openModalDeleteChannel}
             />
           </div>
           <div className="col p-0 h-100">

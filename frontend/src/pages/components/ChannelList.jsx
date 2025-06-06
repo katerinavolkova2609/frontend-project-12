@@ -1,15 +1,13 @@
 import { useState, useRef, useCallback } from 'react';
 import useClickOutside from '../utils/useClickOutside.jsx';
-import { removeChannel } from '../api.js';
 
 const ChannelList = ({
   channels,
   selectedChannelId,
   onSelect,
-  token,
   onRemove,
+  openModal,
 }) => {
-  // const [isOpen, setIsOpen] = useState(false);
   const [openMenuChannelId, setOpenMenuChannelId] = useState();
   const dropdounRef = useRef(null);
 
@@ -41,7 +39,7 @@ const ChannelList = ({
                   selectedChannelId === channel.id ? ' btn-secondary' : ''
                 }`}
               >
-                <span class="me-1">#</span>
+                <span className="me-1">#</span>
                 {channel.name}
               </button>
               <button
@@ -53,7 +51,7 @@ const ChannelList = ({
                   openMenuChannelId === channel.id && ' show'
                 }${selectedChannelId === channel.id ? ' btn-secondary' : ''}`}
               >
-                <span class="visually-hidden">Управление каналом</span>
+                <span className="visually-hidden">Управление каналом</span>
               </button>
               {openMenuChannelId === channel.id && (
                 <div
@@ -70,7 +68,11 @@ const ChannelList = ({
                   }}
                 >
                   <a
-                    onClick={async () => await onRemove(token, channel.id)}
+                    // onClick={async () => await onRemove(token, channel.id)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openModal(channel.id);
+                    }}
                     data-rr-ui-dropdown-item=""
                     className="dropdown-item"
                     role="button"
