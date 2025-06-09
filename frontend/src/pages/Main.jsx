@@ -3,7 +3,6 @@ import {
   getChannels,
   getMessages,
   sendMessage,
-  removeMessage,
   removeChannel,
   editChannel,
 } from './api.js';
@@ -24,6 +23,7 @@ import {
   removeChannelFromState,
   renameChannel,
 } from '../store/channelsSlice.js';
+import Header from './components/Header.jsx';
 import ChannelList from './components/ChannelList.jsx';
 import MessaageList from './components/MessageList.jsx';
 import MessageForm from './components/MessageForm.jsx';
@@ -153,7 +153,6 @@ const Main = () => {
 
   const handleRemoveChannel = async (token, channelId) => {
     dispatch(removeChannelFromState(channelId));
-    console.log(channelId);
     await removeChannel(token, channelId);
     const channels = await getChannels(token);
     dispatch(setChannels(channels));
@@ -202,23 +201,14 @@ const Main = () => {
         onEdit={handleEditChannel}
         token={token}
         channelId={selectedChannelId}
-        channelName={getselectedChannelName(selectedChannelId)}
+        channelName={() => getselectedChannelName(selectedChannelId)}
       />
       {isModalAddChannelOpen ||
         isModalDeleteChannelOpen ||
         (isModalEditChannelOpen && (
           <div className="fade modal-backdrop show" />
         ))}
-      <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
-        <div className="container">
-          <a className="navbar-brand" href="/">
-            Hexlet Chat
-          </a>
-          <button type="button" className="btn btn-primary">
-            Выйти
-          </button>
-        </div>
-      </nav>
+      <Header />
       <div className="container h-100 my-4 overflow-hidden rounded shadow">
         <div className="row h-100 bg-white flex-md-row">
           <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">

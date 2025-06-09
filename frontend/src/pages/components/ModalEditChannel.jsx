@@ -1,6 +1,6 @@
 import { sendNewChannel, getChannels } from '../api';
 import { getChannelsFromState } from '../../store/channelsSlice.js';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -19,9 +19,9 @@ const ModalEditChannel = ({
 
   const formik = useFormik({
     initialValues: {
-      channel: '',
+      channel: channelName,
     },
-
+    enableReinitialize: true,
     onSubmit: async (values) => {
       try {
         await onEdit(token, channelId, { name: values.channel });

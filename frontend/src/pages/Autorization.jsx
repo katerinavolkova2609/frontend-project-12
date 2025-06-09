@@ -1,16 +1,11 @@
 import avatar from '../assets/avatar.jpg';
+import Header from './components/Header';
 import FormComponent from './components/AuthForm.jsx';
 
 const Autorization = () => {
   return (
     <div className="d-flex flex-column vh-100" id="chat">
-      <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
-        <div className="container">
-          <a className="navbar-brand" href="/">
-            Hexlet Chat
-          </a>
-        </div>
-      </nav>
+      <Header />
       <div className="container-fluid flex-grow-1 d-flex justify-content-center align-items-center">
         <div className="row justify-content-center w-100">
           <div className="col-12 col-md-8 col-xxl-6">

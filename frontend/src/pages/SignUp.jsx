@@ -1,19 +1,11 @@
 import avatar from '../assets/avatar_Tota.jpg';
+import Header from './components/Header';
 import SignUpForm from './components/SignUpForm';
 
 const SignUp = () => {
   return (
     <div class="d-flex flex-column vh-100" id="signup">
-      <nav class="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
-        <div class="container">
-          <a class="navbar-brand" href="/login">
-            Hexlet Chat
-          </a>
-          <button type="button" class="btn btn-primary">
-            Выйти
-          </button>
-        </div>
-      </nav>
+      <Header />
       <div class="container-fluid h-100">
         <div class="row justify-content-center align-content-center h-100">
           <div class="col-12 col-md-8 col-xxl-6">
