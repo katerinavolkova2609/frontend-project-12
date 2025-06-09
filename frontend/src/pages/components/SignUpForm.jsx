@@ -26,8 +26,9 @@ const SignUpForm = () => {
           navigate('/');
         }
       } catch (e) {
-        console.error(e);
-        setErrorMessage('Ошибка отправки данных');
+        e.response.status === 409
+          ? setErrorMessage('Такой пользователь уже существует')
+          : setErrorMessage('Ошибка отправки данных');
       }
     },
     validationSchema: Yup.object().shape({
@@ -82,7 +83,7 @@ const SignUpForm = () => {
           type="password"
           id="password"
           class={`form-control  ${
-            formik.errors.password && formik.touched.password || errorMessage
+            (formik.errors.password && formik.touched.password) || errorMessage
               ? 'is-invalid'
               : ''
           }`}
@@ -91,7 +92,9 @@ const SignUpForm = () => {
           onBlur={formik.handleBlur}
         />
         {formik.errors.password && formik.touched.password ? (
-          <div placement="right" class="invalid-tooltip">{formik.errors.password}</div>
+          <div placement="right" class="invalid-tooltip">
+            {formik.errors.password}
+          </div>
         ) : null}
         <label class="form-label" for="password">
           Пароль
@@ -106,7 +109,7 @@ const SignUpForm = () => {
           type="password"
           id="confirmPassword"
           class={`form-control  ${
-            formik.errors.confirmPassword && formik.touched.confirmPassword ||
+            (formik.errors.confirmPassword && formik.touched.confirmPassword) ||
             errorMessage
               ? 'is-invalid'
               : ''
@@ -116,7 +119,9 @@ const SignUpForm = () => {
           onBlur={formik.handleBlur}
         />
         {formik.errors.confirmPassword && formik.touched.confirmPassword ? (
-          <div placement="right" class="invalid-tooltip">{formik.errors.confirmPassword}</div>
+          <div placement="right" class="invalid-tooltip">
+            {formik.errors.confirmPassword}
+          </div>
         ) : null}
         <label class="form-label" for="confirmPassword">
           Подтвердите пароль
