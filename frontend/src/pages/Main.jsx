@@ -5,6 +5,7 @@ import {
   sendMessage,
   removeMessage,
   removeChannel,
+  editChannel,
 } from './api.js';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -21,11 +22,15 @@ import {
   addChannel,
   setCurrentChannel,
   removeChannelFromState,
+  renameChannel,
 } from '../store/channelsSlice.js';
 import ChannelList from './components/ChannelList.jsx';
+import MessaageList from './components/MessageList.jsx';
 import MessageForm from './components/MessageForm.jsx';
 import ModalAddChannel from './components/ModalAddChannel.jsx';
 import ModalDeleteChannel from './components/ModalDeleteChannel.jsx';
+import ModalEditChannel from './components/ModalEditChannel.jsx';
+import defaultChannel from './utils/defaultChannel.js';
 import socket from './socket.js';
 
 const Main = () => {
@@ -36,6 +41,7 @@ const Main = () => {
   const [newMessageBody, setNewMessageBody] = useState('');
   const [isModalAddChannelOpen, setModalAddChannelOpen] = useState(false);
   const [isModalDeleteChannelOpen, setModalDeleteChannelOpen] = useState(false);
+  const [isModalEditChannelOpen, setModalEditChannelOpen] = useState(false);
   const [selectedChannelId, setSelectedChannelId] = useState(null);
 
   useEffect(() => {
@@ -69,46 +75,36 @@ const Main = () => {
 
   useEffect(() => {
     socket.connect();
-    socket.on('newMessage', (payload) => {
-      dispatch(addMessage(payload));
-    });
-    return () => {
-      socket.off('newMessage');
-      socket.disconnect();
-    };
-  }, []);
 
-  useEffect(() => {
-    socket.connect();
-    socket.on('newChannel', (payload) => {
+    const handleNewChannel = (payload) => {
       dispatch(addChannel(payload));
-    });
-    return () => {
-      socket.off('newChannel');
-      socket.disconnect();
     };
-  }, []);
-
-  useEffect(() => {
-    socket.connect();
-    socket.on('removeChannel', (payload) => {
+    const handleAddMessage = (payload) => {
+      dispatch(addMessage(payload));
+    };
+    const handleRemoveChannel = (payload) => {
       console.log(payload);
-      dispatch(removeChannelFromState(payload));
-    });
+      dispatch(removeChannelFromState(payload.id));
+    };
+    const handleRenameChannel = (payload) => {
+      dispatch(renameChannel(payload));
+    };
+    socket.on('newMessage', handleAddMessage);
+    socket.on('newChannel', handleNewChannel);
+    socket.on('removeChannel', handleRemoveChannel);
+    socket.on('renameChannel', handleRenameChannel);
+
     return () => {
-      socket.off('removeChannel');
+      socket.off('newMessage', handleAddMessage);
+      socket.off('newChannel', handleNewChannel);
+      socket.off('removeChannel', handleRemoveChannel);
+      socket.off('renameChannel', handleRenameChannel);
       socket.disconnect();
     };
   }, []);
 
   const handleClick = (channel) => {
     dispatch(setCurrentChannel(channel));
-  };
-
-  const defaultChannel = {
-    id: '1',
-    name: 'general',
-    removable: false,
   };
 
   const currentChannel = useSelector(getCurrentChannel);
@@ -145,7 +141,19 @@ const Main = () => {
     setSelectedChannelId(null);
   };
 
+  const openModalEditChannel = (channelId) => {
+    setModalEditChannelOpen(true);
+    setSelectedChannelId(channelId);
+  };
+
+  const closeModalEditChannel = () => {
+    setModalEditChannelOpen(false);
+    setSelectedChannelId(null);
+  };
+
   const handleRemoveChannel = async (token, channelId) => {
+    dispatch(removeChannelFromState(channelId));
+    console.log(channelId);
     await removeChannel(token, channelId);
     const channels = await getChannels(token);
     dispatch(setChannels(channels));
@@ -155,6 +163,21 @@ const Main = () => {
     if (currentChannel.id === channelId) {
       handleClick(defaultChannel);
     }
+  };
+
+  const handleEditChannel = async (token, channelId, editedChannel) => {
+    await editChannel(token, channelId, editedChannel);
+    const channels = await getChannels(token);
+    dispatch(setChannels(channels));
+    closeModalEditChannel();
+  };
+  const channels = useSelector(getChannelsFromState);
+
+  const getselectedChannelName = (selectedChannelId) => {
+    const currentChannelToRename = channels.filter(
+      (item) => item.id === selectedChannelId
+    );
+    return currentChannelToRename.name;
   };
 
   return (
@@ -172,8 +195,18 @@ const Main = () => {
         token={token}
         channelId={selectedChannelId}
       />
+      <ModalEditChannel
+        isOpen={isModalEditChannelOpen}
+        onClose={closeModalEditChannel}
+        openModalProps={openModalEditChannel}
+        onEdit={handleEditChannel}
+        token={token}
+        channelId={selectedChannelId}
+        channelName={getselectedChannelName(selectedChannelId)}
+      />
       {isModalAddChannelOpen ||
-        (isModalDeleteChannelOpen && (
+        isModalDeleteChannelOpen ||
+        (isModalEditChannelOpen && (
           <div className="fade modal-backdrop show" />
         ))}
       <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
@@ -210,12 +243,14 @@ const Main = () => {
               </button>
             </div>
             <ChannelList
-              channels={useSelector(getChannelsFromState)}
+              channels={channels}
               selectedChannelId={currentChannel.id}
               onSelect={handleClick}
               token={token}
               onRemove={handleRemoveChannel}
-              openModal={openModalDeleteChannel}
+              onEditChannel={handleEditChannel}
+              openDeleteModal={openModalDeleteChannel}
+              openEditModal={openModalEditChannel}
             />
           </div>
           <div className="col p-0 h-100">
@@ -233,20 +268,10 @@ const Main = () => {
                   сообщений
                 </span>
               </div>
-              <div
-                id="messages-box"
-                className="chat-messages overflow-auto px-5 "
-              >
-                {messages
-                  .filter((item) => item.channelId === currentChannel.id)
-                  .map((message) => (
-                    <div key={message.id} className="text-break mb-2">
-                      <b>{message.username}</b>
-                      {': '}
-                      {message.body}
-                    </div>
-                  ))}
-              </div>
+              <MessaageList
+                messages={messages}
+                currentChannel={currentChannel}
+              />
               <div className="mt-auto px-5 py-3">
                 <MessageForm
                   messageBody={newMessageBody}

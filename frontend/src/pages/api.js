@@ -80,6 +80,20 @@ const removeChannel = async (token, id) => {
   }
 };
 
+// const editedChannel = { name: 'new name channel' };
+const editChannel = async (token, channelId, editedChannel) => {
+  try {
+    await axios.patch(`/api/v1/channels/${channelId}`, editedChannel, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.error('Ошибка при переименовании канала:', error);
+    throw error;
+  }
+};
+
 export {
   getChannels,
   getMessages,
@@ -87,4 +101,5 @@ export {
   removeMessage,
   sendNewChannel,
   removeChannel,
+  editChannel,
 };

@@ -23,13 +23,21 @@ const channelsSlice = createSlice({
       state.currentChannel = action.payload;
     },
     removeChannelFromState(state, action) {
-      state.list.filter((channel) => !channel.id === action.payload.id);
+      console.log(action);
+      state.list = state.list.filter((channel) => channel.id !== action.payload);
+    },
+    renameChannel(state, action) {
+      const channel = state.list.find((ch) => ch.id === action.payload.id);
+      if (channel) {
+        channel.name = action.payload.name;
+        Object.assign(channel, action.payload);
+      }
     }
   },
 });
 
 export const getChannelsFromState = (state) => state.channels.list;
 export const getCurrentChannel = (state) => state.channels.currentChannel;
-export const { setChannels, addChannel, setCurrentChannel, removeChannelFromState } =
+export const { setChannels, addChannel, setCurrentChannel, removeChannelFromState, renameChannel } =
   channelsSlice.actions;
 export default channelsSlice.reducer;

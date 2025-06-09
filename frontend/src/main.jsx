@@ -6,6 +6,18 @@ import store from './store/index.js';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+// const init = async () => {
+//   const i18nextInstance = i18next.createInstance();
+//   await i18nextInstance.init({
+//     lng: 'ru',
+//     debug: true,
+//     resources: {
+//       ru,
+//     },
+//   });
+
+// const { t } = useTranslation();
+
 const domNode = document.getElementById('root');
 const root = createRoot(domNode);
 
