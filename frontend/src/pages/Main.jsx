@@ -172,14 +172,6 @@ const Main = () => {
   };
   const channels = useSelector(getChannelsFromState);
 
-  const getselectedChannelName = (selectedChannelId) => {
-    const currentChannelToRename = channels.filter(
-      (item) => item.id === selectedChannelId
-    );
-    console.log(currentChannel)
-    return currentChannelToRename.name;
-  };
-
   return (
     <div className="d-flex flex-column vh-100" id="chat">
       <ModalAddChannel
@@ -190,7 +182,6 @@ const Main = () => {
       <ModalDeleteChannel
         isOpen={isModalDeleteChannelOpen}
         onClose={closeModalDeleteChannel}
-        openModalProps={openModalDeleteChannel}
         onRemove={handleRemoveChannel}
         token={token}
         channelId={selectedChannelId}
@@ -198,11 +189,9 @@ const Main = () => {
       <ModalEditChannel
         isOpen={isModalEditChannelOpen}
         onClose={closeModalEditChannel}
-        openModalProps={openModalEditChannel}
         onEdit={handleEditChannel}
         token={token}
         channelId={selectedChannelId}
-        channelName={() => getselectedChannelName(selectedChannelId)}
       />
       {isModalAddChannelOpen ||
         isModalDeleteChannelOpen ||

@@ -1,7 +1,7 @@
 import { sendNewChannel, getChannels } from '../api';
 import { getChannelsFromState } from '../../store/channelsSlice.js';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
+import {useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useRef, useEffect } from 'react';
@@ -11,7 +11,6 @@ const ModalEditChannel = ({
   onClose,
   token,
   channelId,
-  channelName,
   onEdit,
 }) => {
   if (!isOpen) return null;

@@ -8,11 +8,19 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useRef, useEffect } from 'react';
 
 const AddChannelForm = ({ onClose, token }) => {
   const dispatch = useDispatch();
   const channels = useSelector(getChannelsFromState);
   const namesOfChannels = channels.map((channel) => channel.name);
+
+  const inputEl = useRef(null);
+
+  useEffect(() => {
+      inputEl.current.focus();
+    }, []);
+
   const notify = () => toast.success('Канал создан');
 
   const formik = useFormik({
@@ -51,6 +59,7 @@ const AddChannelForm = ({ onClose, token }) => {
           onChange={formik.handleChange}
           value={formik.values.channel}
           onBlur={formik.handleBlur}
+          ref={inputEl}
         />
         <label className="visually-hidden" for="name">
           Имя канала

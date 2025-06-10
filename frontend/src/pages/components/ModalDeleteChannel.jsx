@@ -10,6 +10,7 @@ const ModalDeleteChannel = ({
 }) => {
   if (!isOpen) return null;
   const notify = () => toast.success('Канал удален');
+
   return (
     <div
       role="dialog"
