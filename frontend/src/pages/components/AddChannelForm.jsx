@@ -1,5 +1,10 @@
+import React from 'react';
+import { toast } from 'react-toastify';
 import { sendNewChannel, getChannels } from '../api';
-import { setCurrentChannel, getChannelsFromState } from '../../store/channelsSlice.js';
+import {
+  setCurrentChannel,
+  getChannelsFromState,
+} from '../../store/channelsSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -8,6 +13,7 @@ const AddChannelForm = ({ onClose, token }) => {
   const dispatch = useDispatch();
   const channels = useSelector(getChannelsFromState);
   const namesOfChannels = channels.map((channel) => channel.name);
+  const notify = () => toast.success('Канал создан');
 
   const formik = useFormik({
     initialValues: {
@@ -19,6 +25,7 @@ const AddChannelForm = ({ onClose, token }) => {
         const channels = await getChannels(token);
         const currentChannel = channels.at(-1);
         dispatch(setCurrentChannel(currentChannel));
+        notify();
         onClose();
       } catch (e) {
         console.error(e);

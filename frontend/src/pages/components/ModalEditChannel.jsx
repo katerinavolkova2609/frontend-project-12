@@ -1,8 +1,10 @@
 import { sendNewChannel, getChannels } from '../api';
 import { getChannelsFromState } from '../../store/channelsSlice.js';
-import { useDispatch, useSelector} from 'react-redux';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useRef, useEffect } from 'react';
 
 const ModalEditChannel = ({
   isOpen,
@@ -14,18 +16,30 @@ const ModalEditChannel = ({
 }) => {
   if (!isOpen) return null;
 
-  const channels = useSelector(getChannelsFromState);
-  const namesOfChannels = channels.map((channel) => channel.name);
+  const notify = () => toast.success('Канал переименован');
 
+  const inputEl = useRef(null);
+  useEffect(() => {
+    if (isOpen && inputEl.current) {
+      inputEl.current.focus();
+    }
+  }, [isOpen]);
+
+  const channels = useSelector(getChannelsFromState);
+  const [ prevChannel ] = channels.filter((channel) => channel.id === channelId);
+  const prevChannelName = prevChannel.name;
+  console.log(prevChannelName)
+  const namesOfChannels = channels.map((channel) => channel.name);
+  // console.log(channelName);
   const formik = useFormik({
     initialValues: {
-      channel: channelName,
+      channel: prevChannelName,
     },
     enableReinitialize: true,
     onSubmit: async (values) => {
       try {
         await onEdit(token, channelId, { name: values.channel });
-        console.log(values);
+        notify();
       } catch (e) {
         console.error(e);
       }
@@ -63,6 +77,7 @@ const ModalEditChannel = ({
               <div>
                 <input
                   name="channel"
+                  required
                   id="channel"
                   className={`mb-2 form-control ${
                     formik.errors.channel && formik.touched.channel
@@ -72,6 +87,7 @@ const ModalEditChannel = ({
                   onChange={formik.handleChange}
                   value={formik.values.channel}
                   onBlur={formik.handleBlur}
+                  ref={inputEl}
                 />
                 <label className="visually-hidden" for="name">
                   Имя канала

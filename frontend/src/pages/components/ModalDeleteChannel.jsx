@@ -1,3 +1,6 @@
+import React from 'react';
+import { toast } from 'react-toastify';
+
 const ModalDeleteChannel = ({
   isOpen,
   onClose,
@@ -6,6 +9,7 @@ const ModalDeleteChannel = ({
   channelId,
 }) => {
   if (!isOpen) return null;
+  const notify = () => toast.success('Канал удален');
   return (
     <div
       role="dialog"
@@ -39,7 +43,14 @@ const ModalDeleteChannel = ({
               </button>
               <button
                 type="button"
-                onClick={async () => await onRemove(token, channelId)}
+                onClick={async () => {
+                  try {
+                    await onRemove(token, channelId);
+                    notify();
+                  } catch (e) {
+                    console.log(e);
+                  }
+                }}
                 className="btn btn-danger"
               >
                 Удалить

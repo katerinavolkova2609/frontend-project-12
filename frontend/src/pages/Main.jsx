@@ -176,6 +176,7 @@ const Main = () => {
     const currentChannelToRename = channels.filter(
       (item) => item.id === selectedChannelId
     );
+    console.log(currentChannel)
     return currentChannelToRename.name;
   };
 
