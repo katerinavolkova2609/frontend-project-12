@@ -30,7 +30,8 @@ const resources = {
       enterMessage: 'Введите сообщение...',
       newMessage: 'Новое сообщение',
       error404: 'Страница не найдена',
-      checkUrl: 'Но вы можете перейти на главную страницу',
+      checkUrl: 'Но вы можете перейти',
+      onMainUrl: 'на главную страницу',
       validation: {
         min_max: 'От 3 до 20 символов',
         uniqChannelName: 'Должно быть уникальным',
