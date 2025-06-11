@@ -1,8 +1,10 @@
 import avatar from '../assets/avatar.jpg';
 import Header from './components/Header';
 import FormComponent from './components/AuthForm.jsx';
+import { useTranslation } from 'react-i18next';
 
 const Autorization = () => {
+  const {t} = useTranslation();
   return (
     <div className="d-flex flex-column vh-100" id="chat">
       <Header />
@@ -17,8 +19,8 @@ const Autorization = () => {
                 <FormComponent />
               </div>
               <div className="card-footer p-4 text-center">
-                <span>Нет аккаунта? </span>
-                <a href="/signup">Регистрация</a>
+                <span>{t('noAccount')}</span>
+                <a href="/signup">{t('registration')}</a>
               </div>
             </div>
           </div>

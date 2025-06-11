@@ -5,9 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../store/authSlice.js';
+import { useTranslation } from 'react-i18next';
 
 const FormComponent = () => {
   const [errorMessage, setErrorMessage] = useState('');
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formik = useFormik({
@@ -26,7 +28,7 @@ const FormComponent = () => {
         } else navigate('/login');
       } catch (e) {
         console.error(e);
-        setErrorMessage('Неверный логин или пароль');
+        setErrorMessage(t('validation.errorAuth'));
       }
     },
     validationSchema: Yup.object().shape({
@@ -39,13 +41,13 @@ const FormComponent = () => {
       className="col-12 col-md-6 mt-3 mt-md-0"
       onSubmit={formik.handleSubmit}
     >
-      <h1 className="text-center mb-4">Войти</h1>
+      <h1 className="text-center mb-4">{t('enter')}</h1>
       <div className="form-floating mb-3">
         <input
           name="username"
           autoComplete="username"
           required=""
-          placeholder="Ваш ник"
+          placeholder={t('login')}
           id="username"
           className={`form-control  ${
             (formik.errors.username && formik.touched.username) || errorMessage
@@ -59,7 +61,7 @@ const FormComponent = () => {
           <div className="text-danger">{formik.errors.username}</div>
         ) : null}
         <label htmlFor="username" className="form-label">
-          Ваш ник
+          {t('login')}
         </label>
       </div>
       <div className="form-floating mb-4">
@@ -67,7 +69,7 @@ const FormComponent = () => {
           name="password"
           autoComplete="current-password"
           required=""
-          placeholder="Пароль"
+          placeholder={t('password')}
           type="password"
           id="password"
           className={`form-control  ${
@@ -82,12 +84,12 @@ const FormComponent = () => {
           <div className="text-danger">{formik.errors.password}</div>
         ) : null}
         <label className="form-label" htmlFor="password">
-          Пароль
+        {t('password')}
         </label>
         {errorMessage && <div className="invalid-tooltip">{errorMessage}</div>}
       </div>
       <button type="submit" className="w-100 mb-3 btn btn-outline-primary">
-        Войти
+        {t('enter')}
       </button>
     </form>
   );

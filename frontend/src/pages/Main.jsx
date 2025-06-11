@@ -32,17 +32,21 @@ import ModalDeleteChannel from './components/ModalDeleteChannel.jsx';
 import ModalEditChannel from './components/ModalEditChannel.jsx';
 import defaultChannel from './utils/defaultChannel.js';
 import socket from './socket.js';
+import { useTranslation } from 'react-i18next';
+import { clean, getDictionary, add } from 'leo-profanity';
 
 const Main = () => {
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const [newMessageBody, setNewMessageBody] = useState('');
   const [isModalAddChannelOpen, setModalAddChannelOpen] = useState(false);
   const [isModalDeleteChannelOpen, setModalDeleteChannelOpen] = useState(false);
   const [isModalEditChannelOpen, setModalEditChannelOpen] = useState(false);
   const [selectedChannelId, setSelectedChannelId] = useState(null);
+  add(getDictionary('ru'));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -171,6 +175,9 @@ const Main = () => {
     closeModalEditChannel();
   };
   const channels = useSelector(getChannelsFromState);
+  const messageCounter = messages.filter(
+    (item) => item.channelId === currentChannel.id
+  ).length;
 
   return (
     <div className="d-flex flex-column vh-100" id="chat">
@@ -203,7 +210,7 @@ const Main = () => {
         <div className="row h-100 bg-white flex-md-row">
           <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
             <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-              <b>Каналы</b>
+              <b>{t('channels')}</b>
               <button
                 type="button"
                 className="p-0 text-primary btn btn-group-vertical"
@@ -237,15 +244,11 @@ const Main = () => {
             <div className="d-flex flex-column h-100">
               <div className="bg-light mb-4 p-3 shadow-sm small">
                 <p className="m-0">
-                  <b># {currentChannel.name}</b>
+                  <b># {clean(currentChannel.name)}</b>
                 </p>
                 <span className="text-muted">
-                  {
-                    messages.filter(
-                      (item) => item.channelId === currentChannel.id
-                    ).length
-                  }
-                  сообщений
+                  {` `}
+                  {t('messages', { count: messageCounter })}
                 </span>
               </div>
               <MessaageList

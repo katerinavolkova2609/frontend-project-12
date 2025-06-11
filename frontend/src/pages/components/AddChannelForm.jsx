@@ -7,21 +7,22 @@ import {
 } from '../../store/channelsSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import getSchema from '../utils/validationSchema';
 
 const AddChannelForm = ({ onClose, token }) => {
   const dispatch = useDispatch();
   const channels = useSelector(getChannelsFromState);
+  const { t } = useTranslation();
   const namesOfChannels = channels.map((channel) => channel.name);
-
   const inputEl = useRef(null);
 
   useEffect(() => {
-      inputEl.current.focus();
-    }, []);
+    inputEl.current.focus();
+  }, []);
 
-  const notify = () => toast.success('Канал создан');
+  const notify = () => toast.success(t('notify.create'));
 
   const formik = useFormik({
     initialValues: {
@@ -39,12 +40,7 @@ const AddChannelForm = ({ onClose, token }) => {
         console.error(e);
       }
     },
-    validationSchema: Yup.object().shape({
-      channel: Yup.string()
-        .min(3, 'От 3 до 20 символов')
-        .notOneOf(namesOfChannels, 'Должно быть уникальным')
-        .required('Введите название канала'),
-    }),
+    validationSchema: getSchema(namesOfChannels, t),
   });
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -62,7 +58,7 @@ const AddChannelForm = ({ onClose, token }) => {
           ref={inputEl}
         />
         <label className="visually-hidden" for="name">
-          Имя канала
+          {t('nameOfChannel')}
         </label>
         {formik.errors.channel && formik.touched.channel ? (
           <div class="invalid-feedback">{formik.errors.channel}</div>
@@ -74,10 +70,10 @@ const AddChannelForm = ({ onClose, token }) => {
             className="me-2 btn btn-secondary"
             onClick={onClose}
           >
-            Отменить
+            {t('cancel')}
           </button>
           <button type="submit" className="btn btn-primary">
-            Отправить
+            {t('confirm')}
           </button>
         </div>
       </div>

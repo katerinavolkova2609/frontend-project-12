@@ -1,5 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
 import useClickOutside from '../utils/useClickOutside.jsx';
+import { useTranslation } from 'react-i18next';
+import {clean} from 'leo-profanity';
 
 const ChannelList = ({
   channels,
@@ -10,6 +12,7 @@ const ChannelList = ({
 }) => {
   const [openMenuChannelId, setOpenMenuChannelId] = useState();
   const dropdounRef = useRef(null);
+  const { t } = useTranslation();
 
   const toggleMenu = useCallback((channelId) => {
     setOpenMenuChannelId((prev) => (prev === channelId ? null : channelId));
@@ -40,7 +43,7 @@ const ChannelList = ({
                 }`}
               >
                 <span className="me-1">#</span>
-                {channel.name}
+                {clean(channel.name)}
               </button>
               <button
                 onClick={() => toggleMenu(channel.id)}
@@ -51,7 +54,7 @@ const ChannelList = ({
                   openMenuChannelId === channel.id && ' show'
                 }${selectedChannelId === channel.id ? ' btn-secondary' : ''}`}
               >
-                <span className="visually-hidden">Управление каналом</span>
+                <span className="visually-hidden">{t('controlChannel')}</span>
               </button>
               {openMenuChannelId === channel.id && (
                 <div
@@ -78,7 +81,7 @@ const ChannelList = ({
                     tabindex="0"
                     href="#"
                   >
-                    Удалить
+                    {t('delete')}
                   </a>
                   <a
                      onClick={(e) => {
@@ -91,7 +94,7 @@ const ChannelList = ({
                     tabindex="0"
                     href="#"
                   >
-                    Переименовать
+                    {t('rename')}
                   </a>
                 </div>
               )}
@@ -105,7 +108,7 @@ const ChannelList = ({
               }`}
             >
               <span className="me-1">#</span>
-              {channel.name}
+              {clean(channel.name)}
             </button>
           )}
         </li>

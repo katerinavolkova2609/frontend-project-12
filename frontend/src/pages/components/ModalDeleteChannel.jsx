@@ -1,5 +1,6 @@
 import React from 'react';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const ModalDeleteChannel = ({
   isOpen,
@@ -9,7 +10,8 @@ const ModalDeleteChannel = ({
   channelId,
 }) => {
   if (!isOpen) return null;
-  const notify = () => toast.success('Канал удален');
+  const { t } = useTranslation();
+  const notify = () => toast.success(t('notify.delete'));
 
   return (
     <div
@@ -23,7 +25,7 @@ const ModalDeleteChannel = ({
       <div className="modal-dialog modal-dialog-centered" onClick={onClose}>
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <div className="modal-header">
-            <div className="modal-title h4">Удалить канал</div>
+            <div className="modal-title h4">{t('deleteChannel')}</div>
             <button
               type="button"
               onClick={onClose}
@@ -33,14 +35,14 @@ const ModalDeleteChannel = ({
             ></button>
           </div>
           <div className="modal-body">
-            <p className="lead">Уверены?</p>
+            <p className="lead">{t('sure')}</p>
             <div className="d-flex justify-content-end">
               <button
                 type="button"
                 onClick={onClose}
                 className="me-2 btn btn-secondary"
               >
-                Отменить
+                {t('cancel')}
               </button>
               <button
                 type="button"
@@ -54,7 +56,7 @@ const ModalDeleteChannel = ({
                 }}
                 className="btn btn-danger"
               >
-                Удалить
+                {t('delete')}
               </button>
             </div>
           </div>

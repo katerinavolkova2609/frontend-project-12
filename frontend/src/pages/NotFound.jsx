@@ -1,8 +1,11 @@
+import { useTranslation } from 'react-i18next';
+
 const NotFound = () => {
+  const {t} = useTranslation();
   return (
     <div>
-      <h1>Sorry, that page doesn't exist.</h1>
-      <p>Please check your URL</p>
+      <h1>{t('error404')}</h1>
+      <p>{t('checkUrl')}</p>
     </div>
   );
 };

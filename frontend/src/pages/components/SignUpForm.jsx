@@ -5,11 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../store/authSlice.js';
+import { useTranslation } from 'react-i18next';
 
 const SignUpForm = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -27,29 +29,29 @@ const SignUpForm = () => {
         }
       } catch (e) {
         e.response.status === 409
-          ? setErrorMessage('Такой пользователь уже существует')
-          : setErrorMessage('Ошибка отправки данных');
+          ? setErrorMessage(t('sameUser'))
+          : setErrorMessage(t('errorPostData'));
       }
     },
     validationSchema: Yup.object().shape({
       username: Yup.string()
-        .min(3, 'От 3 до 20 символов')
-        .max(20, 'От 3 до 20 символов')
-        .required('обязательное поле'),
+        .min(3, t('validation.min_max'))
+        .max(20, t('validation.min_max'))
+        .required(t('validation.required')),
       password: Yup.string()
-        .min(6, 'минимум 6 символов')
-        .required('обязательное поле'),
+        .min(6, t('validation.min'))
+        .required(t('validation.required')),
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password')], 'пароли должны совпадать')
-        .required('обязательное поле'),
+        .oneOf([Yup.ref('password')], t('validation.matchPasswords'))
+        .required(t('validation.required')),
     }),
   });
   return (
     <form class="w-50" onSubmit={formik.handleSubmit}>
-      <h1 class="text-center mb-4">Регистрация</h1>
+      <h1 class="text-center mb-4">{t('registration')}</h1>
       <div class="form-floating mb-3">
         <input
-          placeholder="От 3 до 20 символов"
+          placeholder={t('validation.min_max')}
           name="username"
           autocomplete="username"
           required=""
@@ -70,12 +72,12 @@ const SignUpForm = () => {
         ) : null}
 
         <label class="form-label" for="username">
-          Имя пользователя
+          {t('username')}
         </label>
       </div>
       <div class="form-floating mb-3">
         <input
-          placeholder="Не менее 6 символов"
+          placeholder={t('validation.min_max')}
           name="password"
           aria-describedby="passwordHelpBlock"
           required=""
@@ -97,12 +99,12 @@ const SignUpForm = () => {
           </div>
         ) : null}
         <label class="form-label" for="password">
-          Пароль
+          {t('password')}
         </label>
       </div>
       <div class="form-floating mb-4">
         <input
-          placeholder="Пароли должны совпадать"
+          placeholder={t('matchPasswords')}
           name="confirmPassword"
           required=""
           autocomplete="new-password"
@@ -124,12 +126,12 @@ const SignUpForm = () => {
           </div>
         ) : null}
         <label class="form-label" for="confirmPassword">
-          Подтвердите пароль
+          {t('confirmPassword')}
         </label>
         {errorMessage && <div className="invalid-tooltip">{errorMessage}</div>}
       </div>
       <button type="submit" class="w-100 btn btn-outline-primary">
-        Зарегистрироваться
+        {t('toRegister')}
       </button>
     </form>
   );

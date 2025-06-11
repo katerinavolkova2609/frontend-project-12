@@ -1,21 +1,18 @@
 import { sendNewChannel, getChannels } from '../api';
 import { getChannelsFromState } from '../../store/channelsSlice.js';
 import { toast } from 'react-toastify';
-import {useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import getSchema from '../utils/validationSchema';
 
-const ModalEditChannel = ({
-  isOpen,
-  onClose,
-  token,
-  channelId,
-  onEdit,
-}) => {
+const ModalEditChannel = ({ isOpen, onClose, token, channelId, onEdit }) => {
   if (!isOpen) return null;
 
-  const notify = () => toast.success('Канал переименован');
+  const { t } = useTranslation();
+  const notify = () => toast.success(t('notify.rename'));
 
   const inputEl = useRef(null);
   useEffect(() => {
@@ -25,11 +22,9 @@ const ModalEditChannel = ({
   }, [isOpen]);
 
   const channels = useSelector(getChannelsFromState);
-  const [ prevChannel ] = channels.filter((channel) => channel.id === channelId);
+  const [prevChannel] = channels.filter((channel) => channel.id === channelId);
   const prevChannelName = prevChannel.name;
-  console.log(prevChannelName)
   const namesOfChannels = channels.map((channel) => channel.name);
-  // console.log(channelName);
   const formik = useFormik({
     initialValues: {
       channel: prevChannelName,
@@ -43,12 +38,7 @@ const ModalEditChannel = ({
         console.error(e);
       }
     },
-    validationSchema: Yup.object().shape({
-      channel: Yup.string()
-        .min(3, 'От 3 до 20 символов')
-        .notOneOf(namesOfChannels, 'Должно быть уникальным')
-        .required('Введите название канала'),
-    }),
+    validationSchema: getSchema(namesOfChannels, t),
   });
   return (
     <div
@@ -62,7 +52,7 @@ const ModalEditChannel = ({
       <div className="modal-dialog modal-dialog-centered" onClick={onClose}>
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <div className="modal-header">
-            <div className="modal-title h4">Переименовать канал</div>
+            <div className="modal-title h4">{t('renameChannel')}</div>
             <button
               onClick={onClose}
               type="button"
@@ -89,7 +79,7 @@ const ModalEditChannel = ({
                   ref={inputEl}
                 />
                 <label className="visually-hidden" for="name">
-                  Имя канала
+                  {t('nameOfChannel')}
                 </label>
                 {formik.errors.channel && formik.touched.channel ? (
                   <div class="invalid-feedback">{formik.errors.channel}</div>
@@ -101,10 +91,10 @@ const ModalEditChannel = ({
                     type="button"
                     className="me-2 btn btn-secondary"
                   >
-                    Отменить
+                    {t('cancel')}
                   </button>
                   <button type="submit" className="btn btn-primary">
-                    Отправить
+                    {t('confirm')}
                   </button>
                 </div>
               </div>
