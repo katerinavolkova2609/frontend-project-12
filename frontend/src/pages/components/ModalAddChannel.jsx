@@ -1,3 +1,4 @@
+import React from 'react';
 import AddChannelForm from './AddChannelForm.jsx';
 
 
@@ -8,7 +9,7 @@ const ModalAddChannel = ({ isOpen, onClose, token }) => {
       role="dialog"
       aria-modal="true"
       className="fade modal show"
-      tabindex="-1"
+      tabIndex="-1"
       style={{ display: 'block' }}
       onClick={onClose}
     >

@@ -1,3 +1,4 @@
+import React from 'react';
 import avatar from '../assets/avatar.jpg';
 import Header from './components/Header';
 import FormComponent from './components/AuthForm.jsx';

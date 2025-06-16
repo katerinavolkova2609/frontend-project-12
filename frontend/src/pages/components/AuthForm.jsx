@@ -1,3 +1,4 @@
+import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -20,7 +21,7 @@ const FormComponent = () => {
     onSubmit: async (values) => {
       try {
         const response = await axios.post('/api/v1/login', values);
-        if (response.data.hasOwnProperty('token')) {
+        if (Object.hasOwn(response.data, 'token')) {
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('username', response.data.username);
           dispatch(setUser({ user: response.data }));

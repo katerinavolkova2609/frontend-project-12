@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unknown-property */ 
+import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -21,7 +23,7 @@ const SignUpForm = () => {
     onSubmit: async (values) => {
       try {
         const response = await axios.post('/api/v1/signup', values);
-        if (response.data.hasOwnProperty('token')) {
+        if (Object.hasOwn(response.data, 'token')) {
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('username', response.data.username);
           dispatch(setUser({ user: response.data }));
@@ -47,13 +49,13 @@ const SignUpForm = () => {
     }),
   });
   return (
-    <form class="w-50" onSubmit={formik.handleSubmit}>
-      <h1 class="text-center mb-4">{t('registration')}</h1>
-      <div class="form-floating mb-3">
+    <form className="w-50" onSubmit={formik.handleSubmit}>
+      <h1 className="text-center mb-4">{t('registration')}</h1>
+      <div className="form-floating mb-3">
         <input
           placeholder={t('validation.min_max')}
           name="username"
-          autocomplete="username"
+          autoComplete="username"
           required=""
           id="username"
           className={`form-control  ${
@@ -66,25 +68,25 @@ const SignUpForm = () => {
           onBlur={formik.handleBlur}
         />
         {formik.errors.username && formik.touched.username ? (
-          <div placement="right" class="invalid-tooltip">
+          <div placement="right" className="invalid-tooltip">
             {formik.errors.username}
           </div>
         ) : null}
 
-        <label class="form-label" for="username">
+        <label className="form-label" htmlFor="username">
           {t('username')}
         </label>
       </div>
-      <div class="form-floating mb-3">
+      <div className="form-floating mb-3">
         <input
           placeholder={t('validation.min_max')}
           name="password"
           aria-describedby="passwordHelpBlock"
           required=""
-          autocomplete="new-password"
+          autoComplete="new-password"
           type="password"
           id="password"
-          class={`form-control  ${
+          className={`form-control  ${
             (formik.errors.password && formik.touched.password) || errorMessage
               ? 'is-invalid'
               : ''
@@ -94,23 +96,23 @@ const SignUpForm = () => {
           onBlur={formik.handleBlur}
         />
         {formik.errors.password && formik.touched.password ? (
-          <div placement="right" class="invalid-tooltip">
+          <div placement="right" className="invalid-tooltip">
             {formik.errors.password}
           </div>
         ) : null}
-        <label class="form-label" for="password">
+        <label className="form-label" htmlFor="password">
           {t('password')}
         </label>
       </div>
-      <div class="form-floating mb-4">
+      <div className="form-floating mb-4">
         <input
           placeholder={t('matchPasswords')}
           name="confirmPassword"
           required=""
-          autocomplete="new-password"
+          autoComplete="new-password"
           type="password"
           id="confirmPassword"
-          class={`form-control  ${
+          className={`form-control  ${
             (formik.errors.confirmPassword && formik.touched.confirmPassword) ||
             errorMessage
               ? 'is-invalid'
@@ -121,16 +123,16 @@ const SignUpForm = () => {
           onBlur={formik.handleBlur}
         />
         {formik.errors.confirmPassword && formik.touched.confirmPassword ? (
-          <div placement="right" class="invalid-tooltip">
+          <div placement="right" className="invalid-tooltip">
             {formik.errors.confirmPassword}
           </div>
         ) : null}
-        <label class="form-label" for="confirmPassword">
+        <label className="form-label" htmlFor="confirmPassword">
           {t('confirmPassword')}
         </label>
         {errorMessage && <div className="invalid-tooltip">{errorMessage}</div>}
       </div>
-      <button type="submit" class="w-100 btn btn-outline-primary">
+      <button type="submit" className="w-100 btn btn-outline-primary">
         {t('toRegister')}
       </button>
     </form>

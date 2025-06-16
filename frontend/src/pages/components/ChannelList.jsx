@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useRef, useCallback } from 'react';
 import useClickOutside from '../utils/useClickOutside.jsx';
 import { useTranslation } from 'react-i18next';
@@ -58,7 +59,6 @@ const ChannelList = ({
               </button>
               {openMenuChannelId === channel.id && (
                 <div
-                  x-placement="bottom-start"
                   aria-labelledby="react-aria2809273870-:r1:"
                   className="dropdown-menu show"
                   data-popper-reference-hidden="false"
@@ -78,7 +78,7 @@ const ChannelList = ({
                     data-rr-ui-dropdown-item=""
                     className="dropdown-item"
                     role="button"
-                    tabindex="0"
+                    tabIndex="0"
                     href="#"
                   >
                     {t('delete')}
@@ -91,7 +91,7 @@ const ChannelList = ({
                     data-rr-ui-dropdown-item=""
                     className="dropdown-item"
                     role="button"
-                    tabindex="0"
+                    tabIndex="0"
                     href="#"
                   >
                     {t('rename')}

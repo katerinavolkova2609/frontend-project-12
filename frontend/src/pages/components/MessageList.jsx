@@ -1,3 +1,4 @@
+import React from 'react';
 import { clean } from 'leo-profanity';
 
 const MessaageList = ({ messages, currentChannel }) => {

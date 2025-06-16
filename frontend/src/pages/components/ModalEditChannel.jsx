@@ -1,9 +1,8 @@
-import { sendNewChannel, getChannels } from '../api';
+import React from 'react';
 import { getChannelsFromState } from '../../store/channelsSlice.js';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import getSchema from '../utils/validationSchema';
@@ -45,7 +44,7 @@ const ModalEditChannel = ({ isOpen, onClose, token, channelId, onEdit }) => {
       role="dialog"
       aria-modal="true"
       className="fade modal show"
-      tabindex="-1"
+      tabIndex="-1"
       style={{ display: 'block' }}
       onClick={onClose}
     >
@@ -78,11 +77,11 @@ const ModalEditChannel = ({ isOpen, onClose, token, channelId, onEdit }) => {
                   onBlur={formik.handleBlur}
                   ref={inputEl}
                 />
-                <label className="visually-hidden" for="name">
+                <label className="visually-hidden" htmlFor="name">
                   {t('nameOfChannel')}
                 </label>
                 {formik.errors.channel && formik.touched.channel ? (
-                  <div class="invalid-feedback">{formik.errors.channel}</div>
+                  <div className="invalid-feedback">{formik.errors.channel}</div>
                 ) : null}
                 <div className="invalid-feedback"></div>
                 <div className="d-flex justify-content-end">

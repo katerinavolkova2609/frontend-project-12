@@ -18,7 +18,7 @@ const ModalDeleteChannel = ({
       role="dialog"
       aria-modal="true"
       className="fade modal show"
-      tabindex="-1"
+      tabIndex="-1"
       style={{ display: 'block' }}
       onClick={onClose}
     >

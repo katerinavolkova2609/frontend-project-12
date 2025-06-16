@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import {
   getChannels,
@@ -13,7 +14,6 @@ import {
   getMessagesFromState,
   removeMessageFromState,
 } from '../store/messagesSlice.js';
-// import { selectCurrentUser, logout } from '../store/authSlice.js';
 import {
   getChannelsFromState,
   getCurrentChannel,

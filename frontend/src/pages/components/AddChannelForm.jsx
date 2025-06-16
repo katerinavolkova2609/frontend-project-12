@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { sendNewChannel, getChannels } from '../api';
 import {
@@ -48,7 +49,7 @@ const AddChannelForm = ({ onClose, token }) => {
         <input
           name="channel"
           id="channel"
-          class={`mb-2 form-control  ${
+          className={`mb-2 form-control  ${
             formik.errors.channel && formik.touched.channel ? 'is-invalid' : ''
           }`}
           required=""
@@ -57,11 +58,11 @@ const AddChannelForm = ({ onClose, token }) => {
           onBlur={formik.handleBlur}
           ref={inputEl}
         />
-        <label className="visually-hidden" for="name">
+        <label className="visually-hidden" htmlFor="name">
           {t('nameOfChannel')}
         </label>
         {formik.errors.channel && formik.touched.channel ? (
-          <div class="invalid-feedback">{formik.errors.channel}</div>
+          <div className="invalid-feedback">{formik.errors.channel}</div>
         ) : null}
         <div className="invalid-feedback"></div>
         <div className="d-flex justify-content-end">
@@ -81,4 +82,8 @@ const AddChannelForm = ({ onClose, token }) => {
   );
 };
 
+AddChannelForm.propTypes = {
+  onClose: PropTypes.bool.isRequired, 
+  token: PropTypes.number.isRequired,
+}
 export default AddChannelForm;
