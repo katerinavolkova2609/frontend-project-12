@@ -36,7 +36,7 @@ const resources = {
         min_max: 'От 3 до 20 символов',
         uniqChannelName: 'Должно быть уникальным',
         requiredChannelName: 'Введите название канала',
-        errorAuth: 'Неверный логин или пароль',
+        errorAuth: 'Неверные имя пользователя или пароль',
         required: 'Обязательное поле',
         min: 'Не менее 6 символов',
         matchPasswords: 'Пароли должны совпадать',
