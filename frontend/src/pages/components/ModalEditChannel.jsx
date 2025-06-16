@@ -78,7 +78,7 @@ const ModalEditChannel = ({ isOpen, onClose, token, channelId, onEdit }) => {
                   onBlur={formik.handleBlur}
                   ref={inputEl}
                 />
-                <label className="visually-hidden" htmlFor="name">
+                <label className="visually-hidden" htmlFor="channel">
                   {t('nameOfChannel')}
                 </label>
                 {formik.errors.channel && formik.touched.channel
