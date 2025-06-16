@@ -59,7 +59,7 @@ const AddChannelForm = ({ onClose, token }) => {
           ref={inputEl}
         />
         <label className="visually-hidden" htmlFor="name">
-          {t('nameOfChannel')}
+          Имя канала
         </label>
         {formik.errors.channel && formik.touched.channel
           ? (
