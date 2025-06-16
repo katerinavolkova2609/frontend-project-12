@@ -6,7 +6,7 @@ const resources = {
       messages_many: '{{count}} сообщений',
       messages_other: '{{count}} сообщений',
       renameChannel: 'Переименовать канал',
-      chanels: 'Каналы',
+      channels: 'Каналы',
       nameOfChannel: 'Имя канала',
       cancel: 'Отменить',
       confirm: 'Отправить',
@@ -38,7 +38,7 @@ const resources = {
         requiredChannelName: 'Введите название канала',
         errorAuth: 'Неверный логин или пароль',
         required: 'Обязательное поле',
-        min: 'минимум 6 символов',
+        min: 'Не менее 6 символов',
         matchPasswords: 'Пароли должны совпадать',
       },
       notify: {

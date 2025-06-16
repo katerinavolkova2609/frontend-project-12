@@ -248,7 +248,7 @@ const Main = () => {
                 <p className="m-0">
                   <b>
                     #
-                    {clean(currentChannel.name)}
+                    {` ` + clean(currentChannel.name)}
                   </b>
                 </p>
                 <span className="text-muted">
