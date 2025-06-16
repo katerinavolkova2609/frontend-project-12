@@ -1,11 +1,10 @@
-import React from 'react';
-import avatar from '../assets/avatar.jpg';
-import Header from './components/Header';
-import FormComponent from './components/AuthForm.jsx';
-import { useTranslation } from 'react-i18next';
+import avatar from '../assets/avatar.jpg'
+import Header from './components/Header'
+import FormComponent from './components/AuthForm.jsx'
+import { useTranslation } from 'react-i18next'
 
 const Autorization = () => {
-  const {t} = useTranslation();
+  const { t } = useTranslation()
   return (
     <div className="d-flex flex-column vh-100" id="chat">
       <Header />
@@ -28,7 +27,7 @@ const Autorization = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Autorization;
+export default Autorization

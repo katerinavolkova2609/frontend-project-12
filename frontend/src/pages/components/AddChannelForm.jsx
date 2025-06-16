@@ -1,29 +1,28 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
-import { sendNewChannel, getChannels } from '../api';
+import PropTypes from 'prop-types'
+import { toast } from 'react-toastify'
+import { sendNewChannel, getChannels } from '../api'
 import {
   setCurrentChannel,
   getChannelsFromState,
-} from '../../store/channelsSlice.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { useFormik } from 'formik';
-import { useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import getSchema from '../utils/validationSchema';
+} from '../../store/channelsSlice.js'
+import { useDispatch, useSelector } from 'react-redux'
+import { useFormik } from 'formik'
+import { useRef, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import getSchema from '../utils/validationSchema'
 
 const AddChannelForm = ({ onClose, token }) => {
-  const dispatch = useDispatch();
-  const channels = useSelector(getChannelsFromState);
-  const { t } = useTranslation();
-  const namesOfChannels = channels.map((channel) => channel.name);
-  const inputEl = useRef(null);
+  const dispatch = useDispatch()
+  const channels = useSelector(getChannelsFromState)
+  const { t } = useTranslation()
+  const namesOfChannels = channels.map(channel => channel.name)
+  const inputEl = useRef(null)
 
   useEffect(() => {
-    inputEl.current.focus();
-  }, []);
+    inputEl.current.focus()
+  }, [])
 
-  const notify = () => toast.success(t('notify.create'));
+  const notify = () => toast.success(t('notify.create'))
 
   const formik = useFormik({
     initialValues: {
@@ -31,18 +30,19 @@ const AddChannelForm = ({ onClose, token }) => {
     },
     onSubmit: async (values) => {
       try {
-        await sendNewChannel(token, { name: values.channel });
-        const channels = await getChannels(token);
-        const currentChannel = channels.at(-1);
-        dispatch(setCurrentChannel(currentChannel));
-        notify();
-        onClose();
-      } catch (e) {
-        console.error(e);
+        await sendNewChannel(token, { name: values.channel })
+        const channels = await getChannels(token)
+        const currentChannel = channels.at(-1)
+        dispatch(setCurrentChannel(currentChannel))
+        notify()
+        onClose()
+      }
+      catch (e) {
+        console.error(e)
       }
     },
     validationSchema: getSchema(namesOfChannels, t),
-  });
+  })
   return (
     <form onSubmit={formik.handleSubmit}>
       <div>
@@ -61,9 +61,11 @@ const AddChannelForm = ({ onClose, token }) => {
         <label className="visually-hidden" htmlFor="name">
           {t('nameOfChannel')}
         </label>
-        {formik.errors.channel && formik.touched.channel ? (
-          <div className="invalid-feedback">{formik.errors.channel}</div>
-        ) : null}
+        {formik.errors.channel && formik.touched.channel
+          ? (
+              <div className="invalid-feedback">{formik.errors.channel}</div>
+            )
+          : null}
         <div className="invalid-feedback"></div>
         <div className="d-flex justify-content-end">
           <button
@@ -79,11 +81,11 @@ const AddChannelForm = ({ onClose, token }) => {
         </div>
       </div>
     </form>
-  );
-};
+  )
+}
 
 AddChannelForm.propTypes = {
-  onClose: PropTypes.bool.isRequired, 
+  onClose: PropTypes.bool.isRequired,
   token: PropTypes.number.isRequired,
 }
-export default AddChannelForm;
+export default AddChannelForm

@@ -1,12 +1,11 @@
-import React from 'react';
-import { clean } from 'leo-profanity';
+import { clean } from 'leo-profanity'
 
 const MessaageList = ({ messages, currentChannel }) => {
   return (
     <div id="messages-box" className="chat-messages overflow-auto px-5 ">
       {messages
-        .filter((item) => item.channelId === currentChannel.id)
-        .map((message) => (
+        .filter(item => item.channelId === currentChannel.id)
+        .map(message => (
           <div key={message.id} className="text-break mb-2">
             <b>{message.username}</b>
             {': '}
@@ -14,7 +13,7 @@ const MessaageList = ({ messages, currentChannel }) => {
           </div>
         ))}
     </div>
-  );
-};
+  )
+}
 
-export default MessaageList;
+export default MessaageList

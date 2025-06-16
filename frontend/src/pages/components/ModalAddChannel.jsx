@@ -1,9 +1,7 @@
-import React from 'react';
-import AddChannelForm from './AddChannelForm.jsx';
-
+import AddChannelForm from './AddChannelForm.jsx'
 
 const ModalAddChannel = ({ isOpen, onClose, token }) => {
-  if (!isOpen) return null;
+  if (!isOpen) return null
   return (
     <div
       role="dialog"
@@ -14,7 +12,7 @@ const ModalAddChannel = ({ isOpen, onClose, token }) => {
       onClick={onClose}
     >
       <div className="modal-dialog modal-dialog-centered" onClick={onClose}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-content" onClick={e => e.stopPropagation()}>
           <div className="modal-header">
             <div className="modal-title h4">Добавить канал</div>
             <button
@@ -23,7 +21,8 @@ const ModalAddChannel = ({ isOpen, onClose, token }) => {
               data-bs-dismiss="modal"
               className="btn btn-close"
               onClick={onClose}
-            ></button>
+            >
+            </button>
           </div>
           <div className="modal-body">
             <AddChannelForm onClose={onClose} token={token} />
@@ -31,7 +30,7 @@ const ModalAddChannel = ({ isOpen, onClose, token }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ModalAddChannel;
+export default ModalAddChannel

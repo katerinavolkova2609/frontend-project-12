@@ -1,10 +1,9 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Main from './pages/Main.jsx';
-import Autorization from './pages/Autorization.jsx';
-import NotFound from './pages/NotFound.jsx';
-import SignUp from './pages/SignUp.jsx';
-import { ToastContainer } from 'react-toastify';
+import { Routes, Route } from 'react-router-dom'
+import Main from './pages/Main.jsx'
+import Autorization from './pages/Autorization.jsx'
+import NotFound from './pages/NotFound.jsx'
+import SignUp from './pages/SignUp.jsx'
+import { ToastContainer } from 'react-toastify'
 
 function App() {
   return (
@@ -17,7 +16,7 @@ function App() {
       </Routes>
       <ToastContainer />
     </>
-  );
+  )
 }
 
-export default App;
+export default App

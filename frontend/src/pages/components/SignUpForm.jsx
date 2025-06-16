@@ -1,19 +1,19 @@
-/* eslint-disable react/no-unknown-property */ 
-import React from 'react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../../store/authSlice.js';
-import { useTranslation } from 'react-i18next';
+/* eslint-disable react/no-unknown-property */
+
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../../store/authSlice.js'
+import { useTranslation } from 'react-i18next'
 
 const SignUpForm = () => {
-  const [errorMessage, setErrorMessage] = useState('');
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { t } = useTranslation();
+  const [errorMessage, setErrorMessage] = useState('')
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { t } = useTranslation()
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -22,17 +22,18 @@ const SignUpForm = () => {
     },
     onSubmit: async (values) => {
       try {
-        const response = await axios.post('/api/v1/signup', values);
+        const response = await axios.post('/api/v1/signup', values)
         if (Object.hasOwn(response.data, 'token')) {
-          localStorage.setItem('token', response.data.token);
-          localStorage.setItem('username', response.data.username);
-          dispatch(setUser({ user: response.data }));
-          navigate('/');
+          localStorage.setItem('token', response.data.token)
+          localStorage.setItem('username', response.data.username)
+          dispatch(setUser({ user: response.data }))
+          navigate('/')
         }
-      } catch (e) {
+      }
+      catch (e) {
         e.response.status === 409
           ? setErrorMessage(t('sameUser'))
-          : setErrorMessage(t('errorPostData'));
+          : setErrorMessage(t('errorPostData'))
       }
     },
     validationSchema: Yup.object().shape({
@@ -47,7 +48,7 @@ const SignUpForm = () => {
         .oneOf([Yup.ref('password')], t('validation.matchPasswords'))
         .required(t('validation.required')),
     }),
-  });
+  })
   return (
     <form className="w-50" onSubmit={formik.handleSubmit}>
       <h1 className="text-center mb-4">{t('registration')}</h1>
@@ -67,11 +68,13 @@ const SignUpForm = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
-        {formik.errors.username && formik.touched.username ? (
-          <div placement="right" className="invalid-tooltip">
-            {formik.errors.username}
-          </div>
-        ) : null}
+        {formik.errors.username && formik.touched.username
+          ? (
+              <div placement="right" className="invalid-tooltip">
+                {formik.errors.username}
+              </div>
+            )
+          : null}
 
         <label className="form-label" htmlFor="username">
           {t('username')}
@@ -95,11 +98,13 @@ const SignUpForm = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
-        {formik.errors.password && formik.touched.password ? (
-          <div placement="right" className="invalid-tooltip">
-            {formik.errors.password}
-          </div>
-        ) : null}
+        {formik.errors.password && formik.touched.password
+          ? (
+              <div placement="right" className="invalid-tooltip">
+                {formik.errors.password}
+              </div>
+            )
+          : null}
         <label className="form-label" htmlFor="password">
           {t('password')}
         </label>
@@ -113,8 +118,8 @@ const SignUpForm = () => {
           type="password"
           id="confirmPassword"
           className={`form-control  ${
-            (formik.errors.confirmPassword && formik.touched.confirmPassword) ||
-            errorMessage
+            (formik.errors.confirmPassword && formik.touched.confirmPassword)
+            || errorMessage
               ? 'is-invalid'
               : ''
           }`}
@@ -122,11 +127,13 @@ const SignUpForm = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
-        {formik.errors.confirmPassword && formik.touched.confirmPassword ? (
-          <div placement="right" className="invalid-tooltip">
-            {formik.errors.confirmPassword}
-          </div>
-        ) : null}
+        {formik.errors.confirmPassword && formik.touched.confirmPassword
+          ? (
+              <div placement="right" className="invalid-tooltip">
+                {formik.errors.confirmPassword}
+              </div>
+            )
+          : null}
         <label className="form-label" htmlFor="confirmPassword">
           {t('confirmPassword')}
         </label>
@@ -136,7 +143,7 @@ const SignUpForm = () => {
         {t('toRegister')}
       </button>
     </form>
-  );
-};
+  )
+}
 
-export default SignUpForm;
+export default SignUpForm

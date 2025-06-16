@@ -1,7 +1,6 @@
-import React from 'react';
-import avatar from '../assets/avatar_Tota.jpg';
-import Header from './components/Header';
-import SignUpForm from './components/SignUpForm';
+import avatar from '../assets/avatar_Tota.jpg'
+import Header from './components/Header'
+import SignUpForm from './components/SignUpForm'
 
 const SignUp = () => {
   return (
@@ -23,7 +22,7 @@ const SignUp = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SignUp;
+export default SignUp

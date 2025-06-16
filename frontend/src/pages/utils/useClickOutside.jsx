@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
 const useClickOutside = (ref, callback) => {
   useEffect(() => {
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target)) {
-        callback();
+        callback()
       }
     }
-    document.addEventListener('mousedown', handleClickOutside); // Используем mousedown, чтобы обработать клик вне
+    document.addEventListener('mousedown', handleClickOutside) // Используем mousedown, чтобы обработать клик вне
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [ref, callback]);
-};
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [ref, callback])
+}
 
-export default useClickOutside;
+export default useClickOutside
