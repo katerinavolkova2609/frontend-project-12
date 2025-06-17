@@ -2,9 +2,10 @@
 
 ## Chat Project  
 
-Here you can chat and customize the channels for yourself.  
+Stay in touch with the chat app.
+Here you can communicate and customize the channels for yourself.  
 
-![Messages](./frontend/src/assets/messages.jpeg)  
+![Messages](./frontend/src/assets/messages.png)  
 
 ### Demonstration
 
