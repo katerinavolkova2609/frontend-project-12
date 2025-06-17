@@ -162,7 +162,6 @@ const Main = () => {
     await removeChannel(token, channelId)
     const channels = await getChannels(token)
     dispatch(setChannels(channels))
-
     dispatch(removeMessageFromState(channelId))
     closeModalDeleteChannel()
     if (currentChannel.id === channelId) {

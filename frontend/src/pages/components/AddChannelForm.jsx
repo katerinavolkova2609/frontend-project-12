@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import { sendNewChannel, getChannels } from '../api'
 import {
@@ -84,8 +83,4 @@ const AddChannelForm = ({ onClose, token }) => {
   )
 }
 
-AddChannelForm.propTypes = {
-  onClose: PropTypes.bool.isRequired,
-  token: PropTypes.number.isRequired,
-}
 export default AddChannelForm

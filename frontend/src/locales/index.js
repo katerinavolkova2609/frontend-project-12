@@ -43,7 +43,7 @@ const resources = {
       },
       notify: {
         rename: 'Канал переименован',
-        delete: 'Канал удален',
+        delete: 'Канал удалён',
         create: 'Канал создан',
       },
     },
