@@ -1,4 +1,4 @@
-[![Actions Status](https://github.com/katerinavolkova2609/frontend-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/katerinavolkova2609/frontend-project-12/actions)
+[![Actions Status](https://github.com/katerinavolkova2609/frontend-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/katerinavolkova2609/frontend-project-12/actions) [![Maintainability](https://qlty.sh/badges/33f195a6-505d-4ebb-9936-852a698392f0/maintainability.svg)](https://qlty.sh/gh/katerinavolkova2609/projects/frontend-project-12)
 
 ## Chat Project  
 
