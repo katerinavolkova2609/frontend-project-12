@@ -1,4 +1,25 @@
-### Hexlet tests and linter status:
 [![Actions Status](https://github.com/katerinavolkova2609/frontend-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/katerinavolkova2609/frontend-project-12/actions)
 
-The deployed application is here https://frontend-project-12-box0.onrender.com
+## Chat Project  
+
+Here you can chat and customize the channels for yourself.  
+
+![Messages](./frontend/src/assets/messages.jpeg)  
+
+### Demonstration
+
+The deployed application is here [demo](https://frontend-project-12-box0.onrender.com)
+
+### Setup
+
+To setup this project run  
+
+```bash
+  make install
+```
+```bash
+  make develop
+```
+
+### Requirements:
+- npm v10.9.2
