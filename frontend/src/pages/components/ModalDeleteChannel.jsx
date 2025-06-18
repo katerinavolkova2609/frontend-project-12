@@ -10,7 +10,8 @@ const ModalDeleteChannel = ({
 }) => {
   if (!isOpen) return null
   const { t } = useTranslation()
-  const notify = () => toast.success(t('notify.delete'))
+  const successNotify = () => toast.success(t('notify.delete'))
+  const warnNotify = () => toast.warn(t('notify.error'))
 
   return (
     <div
@@ -49,10 +50,11 @@ const ModalDeleteChannel = ({
                 onClick={async () => {
                   try {
                     await onRemove(token, channelId)
-                    notify()
+                    successNotify()
                   }
                   catch (e) {
-                    console.log(e)
+                    console.error(e)
+                    warnNotify()
                   }
                 }}
                 className="btn btn-danger"

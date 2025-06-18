@@ -10,7 +10,8 @@ const ModalEditChannel = ({ isOpen, onClose, token, channelId, onEdit }) => {
   if (!isOpen) return null
 
   const { t } = useTranslation()
-  const notify = () => toast.success(t('notify.rename'))
+  const successNotify = () => toast.success(t('notify.rename'))
+  const warnNotify = () => toast.warn(t('notify.error'))
 
   const inputEl = useRef(null)
   useEffect(() => {
@@ -31,10 +32,11 @@ const ModalEditChannel = ({ isOpen, onClose, token, channelId, onEdit }) => {
     onSubmit: async (values) => {
       try {
         await onEdit(token, channelId, { name: values.channel })
-        notify()
+        successNotify()
       }
       catch (e) {
         console.error(e)
+        warnNotify()
       }
     },
     validationSchema: getSchema(namesOfChannels, t),

@@ -21,7 +21,8 @@ const AddChannelForm = ({ onClose, token }) => {
     inputEl.current.focus()
   }, [])
 
-  const notify = () => toast.success(t('notify.create'))
+  const successNotify = () => toast.success(t('notify.create'))
+  const warnNotify = () => toast.warn(t('notify.error'))
 
   const formik = useFormik({
     initialValues: {
@@ -33,11 +34,12 @@ const AddChannelForm = ({ onClose, token }) => {
         const channels = await getChannels(token)
         const currentChannel = channels.at(-1)
         dispatch(setCurrentChannel(currentChannel))
-        notify()
+        successNotify()
         onClose()
       }
       catch (e) {
         console.error(e)
+        warnNotify()
       }
     },
     validationSchema: getSchema(namesOfChannels, t),
