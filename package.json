@@ -14,32 +14,6 @@
     "frontend"
   ],
   "dependencies": {
-    "@hexlet/chat-server": "^2.0.4",
-    "@reduxjs/toolkit": "^2.7.0",
-    "@rollbar/react": "^0.12.1",
-    "axios": "^1.8.4",
-    "bootstrap": "^5.3.5",
-    "classnames": "^2.5.1",
-    "formik": "^2.4.6",
-    "i18next": "^25.2.1",
-    "leo-profanity": "^1.7.0",
-    "lorem-ipsum": "^2.0.8",
-    "react-bootstrap": "^2.10.9",
-    "react-i18next": "^15.5.2",
-    "react-redux": "^9.2.0",
-    "react-router-dom": "^7.4.1",
-    "react-toastify": "^11.0.5",
-    "rollbar": "^2.26.4",
-    "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1",
-    "yup": "^1.6.1"
-  },
-  "devDependencies": {
-    "@eslint/create-config": "^1.8.1",
-    "@eslint/js": "^9.25.1",
-    "@stylistic/eslint-plugin": "^4.2.0",
-    "eslint": "^9.25.1",
-    "eslint-plugin-react": "^7.37.5",
-    "globals": "^16.0.0"
+    "@hexlet/chat-server": "^2.0.4"
   }
 }
