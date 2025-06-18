@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   getChannels,
   getMessages,
@@ -38,6 +39,7 @@ const Main = () => {
   const token = localStorage.getItem('token')
   const username = localStorage.getItem('username')
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { t } = useTranslation()
 
   const [newMessageBody, setNewMessageBody] = useState('')
@@ -54,6 +56,7 @@ const Main = () => {
           const channels = await getChannels(token)
           dispatch(setChannels(channels))
         }
+        else navigate('/login')
       }
       catch (e) {
         console.error('Ошибка при загрузке каналов:', e)
