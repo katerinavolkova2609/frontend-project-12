@@ -7,8 +7,8 @@ const ChannelList = ({
   channels,
   selectedChannelId,
   onSelect,
-  openDeleteModal,
-  openEditModal,
+  openRemove,
+  openEdit,
 }) => {
   const [openMenuChannelId, setOpenMenuChannelId] = useState()
   const dropdounRef = useRef(null)
@@ -73,7 +73,7 @@ const ChannelList = ({
                       <a
                         onClick={(e) => {
                           e.preventDefault()
-                          openDeleteModal(channel.id)
+                          openRemove(channel.id)
                         }}
                         data-rr-ui-dropdown-item=""
                         className="dropdown-item"
@@ -86,7 +86,7 @@ const ChannelList = ({
                       <a
                         onClick={(e) => {
                           e.preventDefault()
-                          openEditModal(channel.id)
+                          openEdit(channel.id)
                         }}
                         data-rr-ui-dropdown-item=""
                         className="dropdown-item"

@@ -24,12 +24,10 @@ import {
   renameChannel,
 } from '../store/channelsSlice.js'
 import Header from './components/Header.jsx'
+import Modal from './components/Modal.jsx'
 import ChannelList from './components/ChannelList.jsx'
-import MessaageList from './components/MessageList.jsx'
+import MessageList from './components/MessageList.jsx'
 import MessageForm from './components/MessageForm.jsx'
-import ModalAddChannel from './components/ModalAddChannel.jsx'
-import ModalDeleteChannel from './components/ModalDeleteChannel.jsx'
-import ModalEditChannel from './components/ModalEditChannel.jsx'
 import defaultChannel from './utils/defaultChannel.js'
 import socket from './socket.js'
 import { useTranslation } from 'react-i18next'
@@ -43,10 +41,12 @@ const Main = () => {
   const { t } = useTranslation()
 
   const [newMessageBody, setNewMessageBody] = useState('')
-  const [isModalAddChannelOpen, setModalAddChannelOpen] = useState(false)
-  const [isModalDeleteChannelOpen, setModalDeleteChannelOpen] = useState(false)
-  const [isModalEditChannelOpen, setModalEditChannelOpen] = useState(false)
-  const [selectedChannelId, setSelectedChannelId] = useState(null)
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    type: null,
+    channelId: null,
+  })
+
   add(getDictionary('ru'))
 
   useEffect(() => {
@@ -136,28 +136,17 @@ const Main = () => {
     }
   }
   const messages = useSelector(getMessagesFromState)
+  const channels = useSelector(getChannelsFromState)
+  const messageCounter = messages.filter(
+    item => item.channelId === currentChannel.id,
+  ).length
 
-  const openModalAddChannel = () => setModalAddChannelOpen(true)
-  const closeModalAddChannel = () => setModalAddChannelOpen(false)
-
-  const openModalDeleteChannel = (channelId) => {
-    setModalDeleteChannelOpen(true)
-    setSelectedChannelId(channelId)
+  const openModal = (type, channelId = null) => {
+    setModalConfig({ isOpen: true, type, channelId })
   }
 
-  const closeModalDeleteChannel = () => {
-    setModalDeleteChannelOpen(false)
-    setSelectedChannelId(null)
-  }
-
-  const openModalEditChannel = (channelId) => {
-    setModalEditChannelOpen(true)
-    setSelectedChannelId(channelId)
-  }
-
-  const closeModalEditChannel = () => {
-    setModalEditChannelOpen(false)
-    setSelectedChannelId(null)
+  const closeModal = () => {
+    setModalConfig({ isOpen: false, type: null, channelId: null })
   }
 
   const handleRemoveChannel = async (token, channelId) => {
@@ -166,7 +155,7 @@ const Main = () => {
     const channels = await getChannels(token)
     dispatch(setChannels(channels))
     dispatch(removeMessageFromState(channelId))
-    closeModalDeleteChannel()
+    closeModal()
     if (currentChannel.id === channelId) {
       handleClick(defaultChannel)
     }
@@ -176,39 +165,21 @@ const Main = () => {
     await editChannel(token, channelId, editedChannel)
     const channels = await getChannels(token)
     dispatch(setChannels(channels))
-    closeModalEditChannel()
+    closeModal()
   }
-  const channels = useSelector(getChannelsFromState)
-  const messageCounter = messages.filter(
-    item => item.channelId === currentChannel.id,
-  ).length
 
   return (
     <div className="d-flex flex-column vh-100" id="chat">
-      <ModalAddChannel
-        isOpen={isModalAddChannelOpen}
-        onClose={closeModalAddChannel}
+      <Modal
+        isOpen={modalConfig.isOpen}
+        onClose={closeModal}
+        type={modalConfig.type}
         token={token}
-      />
-      <ModalDeleteChannel
-        isOpen={isModalDeleteChannelOpen}
-        onClose={closeModalDeleteChannel}
-        onRemove={handleRemoveChannel}
-        token={token}
-        channelId={selectedChannelId}
-      />
-      <ModalEditChannel
-        isOpen={isModalEditChannelOpen}
-        onClose={closeModalEditChannel}
         onEdit={handleEditChannel}
-        token={token}
-        channelId={selectedChannelId}
+        onRemove={handleRemoveChannel}
+        channelId={modalConfig.channelId}
       />
-      {isModalAddChannelOpen
-        || isModalDeleteChannelOpen
-        || (isModalEditChannelOpen && (
-          <div className="fade modal-backdrop show" />
-        ))}
+      {modalConfig.isOpen && <div className="fade modal-backdrop show" />}
       <Header />
       <div className="container h-100 my-4 overflow-hidden rounded shadow">
         <div className="row h-100 bg-white flex-md-row">
@@ -218,7 +189,7 @@ const Main = () => {
               <button
                 type="button"
                 className="p-0 text-primary btn btn-group-vertical"
-                onClick={openModalAddChannel}
+                onClick={() => openModal('add')}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -238,10 +209,8 @@ const Main = () => {
               selectedChannelId={currentChannel.id}
               onSelect={handleClick}
               token={token}
-              onRemove={handleRemoveChannel}
-              onEditChannel={handleEditChannel}
-              openDeleteModal={openModalDeleteChannel}
-              openEditModal={openModalEditChannel}
+              openRemove={channelId => openModal('delete', channelId)}
+              openEdit={channelId => openModal('edit', channelId)}
             />
           </div>
           <div className="col p-0 h-100">
@@ -258,7 +227,7 @@ const Main = () => {
                   {t('messages', { count: messageCounter })}
                 </span>
               </div>
-              <MessaageList
+              <MessageList
                 messages={messages}
                 currentChannel={currentChannel}
               />

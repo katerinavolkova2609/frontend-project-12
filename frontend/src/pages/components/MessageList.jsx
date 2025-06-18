@@ -1,6 +1,6 @@
 import { clean } from 'leo-profanity'
 
-const MessaageList = ({ messages, currentChannel }) => {
+const MessageList = ({ messages, currentChannel }) => {
   return (
     <div id="messages-box" className="chat-messages overflow-auto px-5 ">
       {messages
@@ -16,4 +16,4 @@ const MessaageList = ({ messages, currentChannel }) => {
   )
 }
 
-export default MessaageList
+export default MessageList

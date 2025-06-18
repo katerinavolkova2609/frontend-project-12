@@ -13,6 +13,7 @@ const resources = {
       confirmPassword: 'Подтвердите пароль',
       sameUser: 'Такой пользователь уже существует',
       deleteChannel: 'Удалить канал',
+      addChannel: 'Добавить канал',
       sure: 'Уверены?',
       delete: 'Удалить',
       enter: 'Войти',
@@ -45,7 +46,7 @@ const resources = {
         rename: 'Канал переименован',
         delete: 'Канал удалён',
         create: 'Канал создан',
-        error: 'Ошибка соединения'
+        error: 'Ошибка соединения',
       },
     },
   },
