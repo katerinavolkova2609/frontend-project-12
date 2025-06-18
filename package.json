@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "[![Actions Status](https://github.com/katerinavolkova2609/frontend-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/katerinavolkova2609/frontend-project-12/actions)",
-  "main": "src/index.js",
+  "main": "./src/main.jsx",
   "scripts": {
     "build": "npm run build --prefix frontend",
     "start": "start-server -s ./frontend/dist",
