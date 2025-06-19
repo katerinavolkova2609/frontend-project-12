@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import {
   getChannels,
   getMessages,
@@ -39,27 +40,32 @@ const Main = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { t } = useTranslation()
-
+  // const warnNotify = toast.warn(t('notify.error'));
   const [newMessageBody, setNewMessageBody] = useState('')
   const [modalConfig, setModalConfig] = useState({
     isOpen: false,
     type: null,
     channelId: null,
   })
-
   add(getDictionary('ru'))
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (token) {
-          const channels = await getChannels(token)
-          dispatch(setChannels(channels))
-        }
-        else navigate('/login')
+        // if (token) {
+        const channels = await getChannels(token)
+        dispatch(setChannels(channels))
+        // }
+        // else navigate('/login')
       }
       catch (e) {
-        console.error('Ошибка при загрузке каналов:', e)
+        if (e.response?.status === 401) {
+          navigate('/login')
+        }
+        else {
+          toast.warn(t('notify.error'))
+          console.error('Ошибка', e)
+        }
       }
     }
     fetchData()
